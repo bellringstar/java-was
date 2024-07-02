@@ -1,5 +1,10 @@
 package codesquad.webserver;
 
+import codesquad.webserver.parser.BodyParser;
+import codesquad.webserver.parser.HeaderParser;
+import codesquad.webserver.parser.HttpParser;
+import codesquad.webserver.parser.QueryStringParser;
+import codesquad.webserver.parser.RequestLineParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +22,7 @@ public class RequestHandler {
     private final HttpResponseBuilder responseBuilder;
 
     public RequestHandler() {
-        this.httpParser = new HttpParser();
+        this.httpParser = new HttpParser(new RequestLineParser(), new HeaderParser(), new QueryStringParser(), new BodyParser());
         this.fileReader = new FileReader();
         this.responseBuilder = new HttpResponseBuilder();
     }
@@ -30,9 +35,9 @@ public class RequestHandler {
         ) {
             try {
                 HttpRequest request = httpParser.parse(in);
-                logger.debug("Received request: " + request.method() + " " + request.path());
+                logger.debug("Received request: " + request.requestLine().method() + " " + request.requestLine().path());
 
-                File file = fileReader.read(request.path());
+                File file = fileReader.read(request.requestLine().path());
                 HttpResponse response = responseBuilder.build(file);
 
                 sendResponse(out, response);

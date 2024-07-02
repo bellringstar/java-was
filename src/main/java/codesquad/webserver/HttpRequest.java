@@ -1,17 +1,8 @@
 package codesquad.webserver;
 
+import codesquad.webserver.parser.RequestLine;
 import java.util.Map;
 
-public record HttpRequest(String method, String path, String httpVersion, Map<String, String> headers, String body) {
+public record HttpRequest(RequestLine requestLine, Map<String, String> headers, String body) {
 
-    @Override
-    public String toString() {
-        return "HttpRequest{" +
-                "method='" + method + '\'' +
-                ", path='" + path + '\'' +
-                ", httpVersion='" + httpVersion + '\'' +
-                ", headers=" + headers +
-                ", body='" + body + '\'' +
-                '}';
-    }
 }
