@@ -12,12 +12,17 @@ public class BodyParser {
 
     public String parse(BufferedReader in, Map<String, String> headers) throws IOException {
         StringBuilder body = new StringBuilder();
-        if (headers.containsKey("Content-Type")) {
-            int contentLength = Integer.parseInt(headers.get("Content-Length"));
-            char[] buffer = new char[contentLength];
-            int read = in.read(buffer, 0, contentLength);
-            body.append(buffer, 0, read);
-            logger.debug("Body : {}", body);
+        if (headers.containsKey("Content-Length")) {
+            try {
+                int contentLength = Integer.parseInt(headers.get("Content-Length"));
+                char[] buffer = new char[contentLength];
+                int read = in.read(buffer, 0, contentLength);
+                body.append(buffer, 0, read);
+                logger.debug("Body : {}", body);
+            } catch (NumberFormatException e) {
+                logger.error("Invalid Content-Length value: {}", headers.get("Content-Length"));
+                throw new IOException("Invalid Content-Length value: " + headers.get("Content-Length"), e);
+            }
         }
         return body.toString();
     }
