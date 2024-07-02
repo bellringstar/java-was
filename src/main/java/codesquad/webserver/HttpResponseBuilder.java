@@ -29,12 +29,11 @@ public class HttpResponseBuilder {
             headers.put("Content-Length", String.valueOf(body.length));
 
             return new HttpResponse(200, "OK", headers, body);
-        } else {
-            return buildNotFondResponse();
         }
+        return buildNotFondResponse();
     }
 
-    private HttpResponse buildNotFondResponse() {
+    public HttpResponse buildNotFondResponse() {
         String body = "<html><body><h1>Not Fond</h1></body></html>";
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/html");
