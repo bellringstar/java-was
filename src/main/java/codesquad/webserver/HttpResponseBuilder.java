@@ -39,7 +39,7 @@ public class HttpResponseBuilder {
         headers.put("Content-Type", "text/html");
         headers.put("Content-Length", String.valueOf(body.length()));
 
-        return new HttpResponse(404, "Not Fond", headers, body.getBytes());
+        return new HttpResponse(404, "Not Found", headers, body.getBytes());
     }
 
     private String getContentType(String fileName) {
