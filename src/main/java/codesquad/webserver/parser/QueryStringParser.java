@@ -1,11 +1,16 @@
 package codesquad.webserver.parser;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class QueryStringParser {
+
+    private static final String CHARSET = "UTF-8";
+    private static final Logger logger = LoggerFactory.getLogger(QueryStringParser.class);
 
     public Map<String, String> parse(String path) {
         String[] urlParams = path.split("\\?");
@@ -15,9 +20,14 @@ public class QueryStringParser {
             for (String info : param.split("&")) {
                 String[] keyValue = info.split("=", 2);
                 if (keyValue.length == 2) {
-                    String key = URLDecoder.decode(keyValue[0].trim(), StandardCharsets.UTF_8);
-                    String value = URLDecoder.decode(keyValue[1].trim(), StandardCharsets.UTF_8);
-                    params.put(key, value);
+                    try {
+                        String key = URLDecoder.decode(keyValue[0].trim(), CHARSET);
+                        String value = URLDecoder.decode(keyValue[1].trim(), CHARSET);
+                        params.put(key, value);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        logger.error(e.getMessage());
+                    }
                 }
             }
             return params;
