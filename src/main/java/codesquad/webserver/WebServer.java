@@ -44,10 +44,4 @@ public class WebServer {
             }
         }
     }
-
-    public static void main(String[] args) {
-        int port = 8080;
-        int threadPoolSize = 10;
-        new WebServer(port, threadPoolSize).start();
-    }
 }
