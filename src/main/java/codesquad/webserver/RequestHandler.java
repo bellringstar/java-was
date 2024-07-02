@@ -2,6 +2,7 @@ package codesquad.webserver;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -27,13 +28,21 @@ public class RequestHandler {
                         new InputStreamReader(clientSocket.getInputStream()));
                 OutputStream out = clientSocket.getOutputStream()
         ) {
-            HttpRequest request = httpParser.parse(in);
-            logger.debug("Received request: " + request.method() + " " + request.path());
+            try {
+                HttpRequest request = httpParser.parse(in);
+                logger.debug("Received request: " + request.method() + " " + request.path());
 
-            File file = fileReader.read(request.path());
-            HttpResponse response = responseBuilder.build(file);
+                File file = fileReader.read(request.path());
+                HttpResponse response = responseBuilder.build(file);
 
-            sendResponse(out, response);
+                sendResponse(out, response);
+            } catch (FileNotFoundException e) {
+                logger.error("File not found: " + e.getMessage());
+                HttpResponse response = responseBuilder.buildNotFondResponse();
+
+                sendResponse(out, response);
+            }
+
         }
     }
 
