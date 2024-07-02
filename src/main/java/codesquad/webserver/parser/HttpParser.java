@@ -3,7 +3,6 @@ package codesquad.webserver.parser;
 import codesquad.webserver.HttpRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,6 @@ public class HttpParser {
         Map<String, String> params = queryStringParser.parse(requestLine.path());
         String body = bodyParser.parse(in, headers);
 
-        return new HttpRequest(requestLine, headers, body);
+        return new HttpRequest(requestLine, headers, params, body);
     }
 }
