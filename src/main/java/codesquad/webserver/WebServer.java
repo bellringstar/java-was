@@ -20,6 +20,7 @@ public class WebServer {
 
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
+            serverSocket.setReuseAddress(true); // 작업 중 껐다 켰다 하는 상황에 발생하는 포트 사용중 발생을 피하기 위해 임시 작성
             logger.info("Starting web server on port {}", port);
             while (!Thread.currentThread().isInterrupted()) {
                 Socket client = serverSocket.accept();
