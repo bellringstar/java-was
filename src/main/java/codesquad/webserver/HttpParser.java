@@ -1,7 +1,9 @@
 package codesquad.webserver;
 
+import codesquad.webserver.model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -27,6 +29,20 @@ public class HttpParser {
         String httpVersion = parts[2];
 
         logger.debug("Request Line : {} {} {}", method, path, httpVersion);
+
+        // path variable 존재시 파싱 후 별도 처리 필요
+        String[] urlParams = path.split("\\?");
+        if (urlParams.length == 2) {
+            String param = path.split("\\?")[1];
+            Map<String, String> params = new HashMap<>();
+            for (String info : param.split("&")) {
+                String key = info.split("=")[0].trim();
+                String value = info.split("=")[1].trim();
+                params.put(key, value);
+            }
+
+            User user = User.of(params);
+        }
 
         Map<String, String> headers = new HashMap<>();
         String headerLine;
