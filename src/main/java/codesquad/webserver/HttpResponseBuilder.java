@@ -42,6 +42,12 @@ public class HttpResponseBuilder {
         return new HttpResponse(404, "Not Found", headers, body.getBytes());
     }
 
+    public HttpResponse buildRedirectResponse(String location) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Location", location);
+        return new HttpResponse(302, "Found", headers, new byte[0]);
+    }
+
     private String getContentType(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
