@@ -35,12 +35,7 @@ public class AbstractRequestHandler implements RequestHandler {
     }
 
     protected HttpResponse handleGet(HttpRequest request) {
-        try {
-            File file = fileReader.read(request.requestLine().path());
-            return build(file);
-        } catch (IOException e) {
-            return buildNotFoundResponse();
-        }
+        return handleMethodNotAllowed();
     }
 
     protected HttpResponse handlePost(HttpRequest request) {
