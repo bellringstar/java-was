@@ -2,7 +2,7 @@ package codesquad.webserver.router;
 
 import codesquad.webserver.requesthandler.RequestHandler;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Router {
@@ -27,9 +27,32 @@ public class Router {
     }
 
     public RequestHandler getHandler(String path) {
-        // 이것만 스레드 안정성 고려 필요한 메서드
-        return Optional.ofNullable(ROUTES.get(path))
-                .orElseThrow(() -> new IllegalArgumentException("해당 경로의 핸들러가 존재하지 않습니다."));
+
+        RequestHandler handler = ROUTES.get(path);
+        if (handler != null) {
+            return handler;
+        }
+
+        for (Entry<String, RequestHandler> entry : ROUTES.entrySet()) {
+            String routePath = entry.getKey();
+            if (isWildcardMatch(routePath, path)) {
+                return entry.getValue();
+            }
+        }
+
+        throw new IllegalArgumentException("핸들러가 존재하지 않습니다 : " + path);
+    }
+
+    private boolean isWildcardMatch(String pattern, String path) {
+        if (pattern.endsWith("/*")) {
+            String prefix = pattern.substring(0, pattern.length() - 2);
+            return path.startsWith(prefix);
+        }
+        if (pattern.startsWith("*.")) {
+            String suffix = pattern.substring(1);
+            return path.endsWith(suffix);
+        }
+        return false;
     }
 
     public void removeRoute(String path) {
