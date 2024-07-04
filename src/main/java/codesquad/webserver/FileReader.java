@@ -27,6 +27,7 @@ public class FileReader {
         }
 
         if (!file.exists()) {
+            // todo: REST API요청일지도?
             logger.error("File not found: " + fileName);
             throw new FileNotFoundException("File not found: " + fileName);
         }

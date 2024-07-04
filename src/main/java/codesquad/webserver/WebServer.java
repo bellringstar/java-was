@@ -1,6 +1,11 @@
 package codesquad.webserver;
 
+import codesquad.webserver.dispatcher.HttpRequestDispatcher;
+import codesquad.webserver.parser.HttpParser;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -12,10 +17,14 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private final ExecutorService threadPool;
     private final int port;
+    private final HttpRequestDispatcher dispatcher;
+    private final HttpParser parser;
 
-    public WebServer(int port, int poolSize) {
+    public WebServer(int port, int poolSize, HttpRequestDispatcher dispatcher, HttpParser parser) {
         this.threadPool = Executors.newFixedThreadPool(poolSize);
         this.port = port;
+        this.dispatcher = dispatcher;
+        this.parser = parser;
     }
 
     public void start() {
@@ -25,16 +34,18 @@ public class WebServer {
             while (!Thread.currentThread().isInterrupted()) {
                 Socket client = serverSocket.accept();
                 logger.info("연결");
-                threadPool.execute(() -> handleRequest(client));
+                threadPool.execute(() -> handleConnection(client));
             }
         } catch (IOException e) {
             logger.error("Error while starting web server", e);
         }
     }
 
-    private void handleRequest(Socket client) {
-        try {
-            new RequestHandler().handle(client);
+    private void handleConnection(Socket client) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+             OutputStream outputStream = client.getOutputStream()) {
+            HttpRequest request = parser.parse(in);
+            dispatcher.dispatch(request, outputStream);
         } catch (Exception e) {
             logger.error("Error while handling request", e);
         } finally {
