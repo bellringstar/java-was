@@ -24,7 +24,8 @@ public class WebServer {
             logger.info("Starting web server on port {}", port);
             while (!Thread.currentThread().isInterrupted()) {
                 Socket client = serverSocket.accept();
-                threadPool.submit(() -> handleRequest(client));
+                logger.info("연결");
+                threadPool.execute(() -> handleRequest(client));
             }
         } catch (IOException e) {
             logger.error("Error while starting web server", e);
