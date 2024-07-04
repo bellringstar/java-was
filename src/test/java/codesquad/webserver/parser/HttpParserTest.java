@@ -2,7 +2,7 @@ package codesquad.webserver.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import codesquad.webserver.HttpRequest;
+import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.parser.enums.HttpMethod;
 import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;

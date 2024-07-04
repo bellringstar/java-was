@@ -1,6 +1,7 @@
 package codesquad.webserver;
 
 import codesquad.webserver.dispatcher.HttpRequestDispatcher;
+import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.parser.HttpParser;
 import java.io.BufferedReader;
 import java.io.IOException;

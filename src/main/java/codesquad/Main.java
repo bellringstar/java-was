@@ -1,6 +1,6 @@
 package codesquad;
 
-import codesquad.webserver.FileReader;
+import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.WebServer;
 import codesquad.webserver.config.RouteConfig;
 import codesquad.webserver.dispatcher.HttpRequestDispatcher;

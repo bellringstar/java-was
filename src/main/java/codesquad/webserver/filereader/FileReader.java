@@ -1,4 +1,4 @@
-package codesquad.webserver;
+package codesquad.webserver.filereader;
 
 import java.io.File;
 import java.io.FileNotFoundException;

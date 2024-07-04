@@ -1,6 +1,6 @@
 package codesquad.webserver.config;
 
-import codesquad.webserver.FileReader;
+import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.requesthandler.HomeRequestHandler;
 import codesquad.webserver.requesthandler.RegisterRequestHandler;
 import codesquad.webserver.requesthandler.StaticFileHandler;

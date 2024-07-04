@@ -3,8 +3,8 @@ package codesquad.webserver.requesthandler;
 import static codesquad.webserver.httpresponse.HttpResponseBuilder.build;
 import static codesquad.webserver.httpresponse.HttpResponseBuilder.buildNotFoundResponse;
 
-import codesquad.webserver.FileReader;
-import codesquad.webserver.HttpRequest;
+import codesquad.webserver.filereader.FileReader;
+import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import java.io.File;
 import java.io.IOException;

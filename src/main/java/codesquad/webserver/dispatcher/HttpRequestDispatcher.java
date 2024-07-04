@@ -1,6 +1,6 @@
 package codesquad.webserver.dispatcher;
 
-import codesquad.webserver.HttpRequest;
+import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import codesquad.webserver.httpresponse.HttpResponseWriter;

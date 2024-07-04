@@ -1,6 +1,6 @@
 package codesquad.webserver.parser;
 
-import codesquad.webserver.HttpRequest;
+import codesquad.webserver.httprequest.HttpRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;

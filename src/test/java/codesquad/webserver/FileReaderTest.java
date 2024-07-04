@@ -3,6 +3,7 @@ package codesquad.webserver;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import codesquad.webserver.filereader.FileReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeEach;

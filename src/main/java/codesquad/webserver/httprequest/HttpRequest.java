@@ -1,4 +1,4 @@
-package codesquad.webserver;
+package codesquad.webserver.httprequest;
 
 import codesquad.webserver.parser.RequestLine;
 import java.util.Map;
