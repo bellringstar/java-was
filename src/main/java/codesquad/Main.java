@@ -10,7 +10,9 @@ import codesquad.webserver.parser.HttpParser;
 import codesquad.webserver.parser.QueryStringParser;
 import codesquad.webserver.parser.RequestLineParser;
 import codesquad.webserver.requesthandler.HomeRequestHandler;
+import codesquad.webserver.requesthandler.RegisterRequestHandler;
 import codesquad.webserver.requesthandler.StaticFileHandler;
+import codesquad.webserver.requesthandler.UserCreateRequestHandler;
 import codesquad.webserver.router.Router;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -50,5 +52,7 @@ public class Main {
         router.addRoute("/favicon.ico", staticFileHandler);
 
         router.addRoute("/index.html", new HomeRequestHandler(reader));
+        router.addRoute("/register.html", new RegisterRequestHandler(reader));
+        router.addRoute("/create", new UserCreateRequestHandler(reader));
     }
 }
