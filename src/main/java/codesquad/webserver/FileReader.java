@@ -15,6 +15,7 @@ public class FileReader {
         String fileName = requestPath.equals("/") ? "index.html" : requestPath.substring(1);
         URL resource = getClass().getClassLoader().getResource(STATIC_DIRECTORY + "/" + fileName);
 
+        logger.info("파일명 : " + fileName);
         if (resource == null) {
             logger.error("File not found: " + fileName);
             throw new FileNotFoundException("File not found: " + fileName);

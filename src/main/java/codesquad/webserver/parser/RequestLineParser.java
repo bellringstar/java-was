@@ -22,11 +22,17 @@ public class RequestLineParser {
         }
 
         HttpMethod method = HttpMethod.find(parts[0]);
-        String path = parts[1];
+        String fullPath = parts[1]; //쿼리스트링 별도 분리 필요
+        String path = extractPath(fullPath);
         String httpVersion = parts[2];
 
-        logger.debug("Request Line : {} {} {}", method, path, httpVersion);
+        logger.debug("Request Line : {} {} {}", method, fullPath, httpVersion);
 
-        return new RequestLine(method, path, httpVersion);
+        return new RequestLine(method, path, fullPath, httpVersion);
+    }
+
+    private String extractPath(String fullPath){
+        int queryStringStart = fullPath.indexOf('?');
+        return queryStringStart != -1 ? fullPath.substring(0, queryStringStart) : fullPath;
     }
 }

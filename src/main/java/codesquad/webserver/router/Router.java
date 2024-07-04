@@ -20,7 +20,7 @@ public class Router {
     }
 
     public void addRoute(String path, RequestHandler handler) {
-        //TODO: path, hadler null 체크 추가
+        //TODO: fullPath, hadler null 체크 추가
         if (ROUTES.putIfAbsent(path, handler) != null) {
             throw new IllegalStateException("이미 존재하는 경로입니다.: " + path);
         }
