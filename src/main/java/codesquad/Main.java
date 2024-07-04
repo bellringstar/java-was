@@ -30,8 +30,7 @@ public class Main {
         init();
         WebServer webServer = new WebServer(PORT,
                 THREAD_POOL_SIZE,
-                new HttpRequestDispatcher(new HttpResponseWriter()),
-                new HttpParser(new RequestLineParser(), new HeaderParser(), new QueryStringParser(),new BodyParser()));
+                new HttpRequestDispatcher(new HttpResponseWriter()));
         webServer.start();
     }
 

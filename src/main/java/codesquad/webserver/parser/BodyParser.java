@@ -6,11 +6,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BodyParser {
+public abstract class BodyParser {
 
     private static final Logger logger = LoggerFactory.getLogger(BodyParser.class);
 
-    public String parse(BufferedReader in, Map<String, String> headers) throws IOException {
+    public static String parse(BufferedReader in, Map<String, String> headers) throws IOException {
         StringBuilder body = new StringBuilder();
         if (headers.containsKey("Content-Length")) {
             try {

@@ -6,11 +6,11 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RequestLineParser {
+public abstract class RequestLineParser {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestLineParser.class);
 
-    public RequestLine parse(BufferedReader in) throws IOException {
+    public static RequestLine parse(BufferedReader in) throws IOException {
         String requestLine = in.readLine();
         if (requestLine == null) {
             throw new IOException("Invalid request line");
@@ -31,7 +31,7 @@ public class RequestLineParser {
         return new RequestLine(method, path, fullPath, httpVersion);
     }
 
-    private String extractPath(String fullPath){
+    private static String extractPath(String fullPath){
         int queryStringStart = fullPath.indexOf('?');
         return queryStringStart != -1 ? fullPath.substring(0, queryStringStart) : fullPath;
     }

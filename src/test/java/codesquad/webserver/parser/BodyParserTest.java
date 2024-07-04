@@ -15,12 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BodyParserTest {
 
-    private BodyParser bodyParser;
-
-    @BeforeEach
-    public void setUp() {
-        bodyParser = new BodyParser();
-    }
 
     @Test
     @DisplayName("Content-Length 헤더를 사용하여 요청 본문을 성공적으로 파싱해야 한다")
@@ -33,7 +27,7 @@ public class BodyParserTest {
         BufferedReader in = new BufferedReader(new StringReader(bodyContent));
 
         // When
-        String parsedBody = bodyParser.parse(in, headers);
+        String parsedBody = BodyParser.parse(in, headers);
 
         // Then
         assertEquals(bodyContent, parsedBody, "요청 본문이 정확히 파싱되어야 합니다.");
@@ -49,7 +43,7 @@ public class BodyParserTest {
         BufferedReader in = new BufferedReader(new StringReader(bodyContent));
 
         // When
-        String parsedBody = bodyParser.parse(in, headers);
+        String parsedBody = BodyParser.parse(in, headers);
 
         // Then
         assertEquals("", parsedBody, "Content-Length 헤더가 없으면 빈 문자열을 반환해야 합니다.");
@@ -67,7 +61,7 @@ public class BodyParserTest {
 
         // When & Then
         IOException exception = assertThrows(IOException.class, () -> {
-            bodyParser.parse(in, headers);
+            BodyParser.parse(in, headers);
         });
         assertEquals("Invalid Content-Length value: invalid", exception.getMessage(), "잘못된 Content-Length 헤더 값이 있으면 IOException이 발생해야 합니다.");
     }

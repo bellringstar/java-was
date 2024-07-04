@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 public class RequestLineParserTest {
 
-    private final RequestLineParser requestLineParser = new RequestLineParser();
 
     @Test
     @DisplayName("정상적인 요청 라인을 파싱해야 한다")
@@ -22,7 +21,7 @@ public class RequestLineParserTest {
         BufferedReader in = new BufferedReader(new StringReader(requestLine));
 
         // When
-        RequestLine result = requestLineParser.parse(in);
+        RequestLine result = RequestLineParser.parse(in);
 
         // Then
         assertEquals(HttpMethod.GET, result.method());
@@ -39,7 +38,7 @@ public class RequestLineParserTest {
 
         // When & Then
         IOException exception = assertThrows(IOException.class, () -> {
-            requestLineParser.parse(in);
+            RequestLineParser.parse(in);
         });
 
         assertEquals("Invalid request line: " + requestLine, exception.getMessage());
@@ -53,7 +52,7 @@ public class RequestLineParserTest {
 
         // When & Then
         IOException exception = assertThrows(IOException.class, () -> {
-            requestLineParser.parse(in);
+            RequestLineParser.parse(in);
         });
 
         assertEquals("Invalid request line", exception.getMessage());
@@ -68,7 +67,7 @@ public class RequestLineParserTest {
 
         // When & Then
         IOException exception = assertThrows(IOException.class, () -> {
-            requestLineParser.parse(in);
+            RequestLineParser.parse(in);
         });
 
         assertEquals("Invalid request line: " + requestLine, exception.getMessage());

@@ -14,12 +14,6 @@ import java.util.Map;
 
 public class HttpParserTest {
 
-    private final RequestLineParser requestLineParser = new RequestLineParser();
-    private final HeaderParser headerParser = new HeaderParser();
-    private final QueryStringParser queryStringParser = new QueryStringParser();
-    private final BodyParser bodyParser = new BodyParser();
-    private final HttpParser httpParser = new HttpParser(requestLineParser, headerParser, queryStringParser, bodyParser);
-
     @Test
     @DisplayName("정상적인 GET 요청을 파싱해야 한다")
     public void testParseValidGetRequest() throws Exception {
@@ -30,7 +24,7 @@ public class HttpParserTest {
         BufferedReader in = new BufferedReader(new StringReader(request));
 
         // When
-        HttpRequest httpRequest = httpParser.parse(in);
+        HttpRequest httpRequest = HttpParser.parse(in);
 
         // Then
         assertEquals(HttpMethod.GET, httpRequest.requestLine().method());
@@ -52,7 +46,7 @@ public class HttpParserTest {
         BufferedReader in = new BufferedReader(new StringReader(request));
 
         // When
-        HttpRequest httpRequest = httpParser.parse(in);
+        HttpRequest httpRequest = HttpParser.parse(in);
 
         // Then
         assertEquals(HttpMethod.GET, httpRequest.requestLine().method());
@@ -74,7 +68,7 @@ public class HttpParserTest {
 
         // When & Then
         IOException exception = org.junit.jupiter.api.Assertions.assertThrows(IOException.class, () -> {
-            httpParser.parse(in);
+            HttpParser.parse(in);
         });
 
         assertEquals("Invalid request line: INVALID_REQUEST_LINE", exception.getMessage());

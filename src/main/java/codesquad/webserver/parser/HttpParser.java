@@ -7,28 +7,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpParser {
+public abstract class HttpParser {
     private static final Logger logger = LoggerFactory.getLogger(HttpParser.class);
-    private final RequestLineParser requestLineParser;
-    private final HeaderParser headerParser;
-    private final QueryStringParser queryStringParser;
-    private final BodyParser bodyParser;
 
-    public HttpParser(RequestLineParser requestLineParser, HeaderParser headerParser,
-                      QueryStringParser queryStringParser,
-                      BodyParser bodyParser) {
-        this.requestLineParser = requestLineParser;
-        this.headerParser = headerParser;
-        this.queryStringParser = queryStringParser;
-        this.bodyParser = bodyParser;
-    }
+    public static HttpRequest parse(BufferedReader in) throws IOException {
 
-    public HttpRequest parse(BufferedReader in) throws IOException {
-
-        RequestLine requestLine = requestLineParser.parse(in);
-        Map<String, String> headers = headerParser.parse(in);
-        Map<String, String> params = queryStringParser.parse(requestLine.fullPath());
-        String body = bodyParser.parse(in, headers);
+        RequestLine requestLine = RequestLineParser.parse(in);
+        Map<String, String> headers = HeaderParser.parse(in);
+        Map<String, String> params = QueryStringParser.parse(requestLine.fullPath());
+        String body = BodyParser.parse(in, headers);
 
         return new HttpRequest(requestLine, headers, params, body);
     }

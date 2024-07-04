@@ -7,12 +7,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QueryStringParser {
+public abstract class QueryStringParser {
 
     private static final String CHARSET = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(QueryStringParser.class);
 
-    public Map<String, String> parse(String path) {
+    public static Map<String, String> parse(String path) {
         String[] urlParams = path.split("\\?");
         if (urlParams.length == 2) {
             String param = path.split("\\?")[1];

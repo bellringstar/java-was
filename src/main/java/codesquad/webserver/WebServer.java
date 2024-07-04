@@ -18,13 +18,11 @@ public class WebServer {
     private final ExecutorService threadPool;
     private final int port;
     private final HttpRequestDispatcher dispatcher;
-    private final HttpParser parser;
 
-    public WebServer(int port, int poolSize, HttpRequestDispatcher dispatcher, HttpParser parser) {
+    public WebServer(int port, int poolSize, HttpRequestDispatcher dispatcher) {
         this.threadPool = Executors.newFixedThreadPool(poolSize);
         this.port = port;
         this.dispatcher = dispatcher;
-        this.parser = parser;
     }
 
     public void start() {
@@ -44,7 +42,7 @@ public class WebServer {
     private void handleConnection(Socket client) {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
              OutputStream outputStream = client.getOutputStream()) {
-            HttpRequest request = parser.parse(in);
+            HttpRequest request = HttpParser.parse(in);
             dispatcher.dispatch(request, outputStream);
         } catch (Exception e) {
             logger.error("Error while handling request", e);

@@ -7,11 +7,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HeaderParser {
+public abstract class HeaderParser {
 
     private static final Logger logger = LoggerFactory.getLogger(HeaderParser.class);
 
-    public Map<String, String> parse(BufferedReader in) throws IOException {
+    public static Map<String, String> parse(BufferedReader in) throws IOException {
         String headerLine;
         Map<String, String> headers = new HashMap<>();
         while ((headerLine = in.readLine()) != null && !headerLine.isEmpty()) {
