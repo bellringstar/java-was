@@ -1,5 +1,6 @@
 package codesquad.webserver.parser;
 
+import codesquad.webserver.parser.enums.HttpMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class RequestLineParser {
             throw new IOException("Invalid request line: " + requestLine);
         }
 
-        String method = parts[0];
+        HttpMethod method = HttpMethod.find(parts[0]);
         String path = parts[1];
         String httpVersion = parts[2];
 

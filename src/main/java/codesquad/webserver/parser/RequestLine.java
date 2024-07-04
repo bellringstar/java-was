@@ -1,5 +1,7 @@
 package codesquad.webserver.parser;
 
-public record RequestLine(String method, String path, String httpVersion) {
+import codesquad.webserver.parser.enums.HttpMethod;
+
+public record RequestLine(HttpMethod method, String path, String httpVersion) {
 
 }
