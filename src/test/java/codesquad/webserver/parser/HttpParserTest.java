@@ -3,6 +3,7 @@ package codesquad.webserver.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import codesquad.webserver.HttpRequest;
+import codesquad.webserver.parser.enums.HttpMethod;
 import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class HttpParserTest {
         HttpRequest httpRequest = httpParser.parse(in);
 
         // Then
-        assertEquals("GET", httpRequest.requestLine().method());
+        assertEquals(HttpMethod.GET, httpRequest.requestLine().method());
         assertEquals("/index.html", httpRequest.requestLine().path());
         assertEquals("HTTP/1.1", httpRequest.requestLine().httpVersion());
         assertEquals("localhost", httpRequest.headers().get("Host"));
@@ -54,8 +55,8 @@ public class HttpParserTest {
         HttpRequest httpRequest = httpParser.parse(in);
 
         // Then
-        assertEquals("GET", httpRequest.requestLine().method());
-        assertEquals("/search?query=java", httpRequest.requestLine().path());
+        assertEquals(HttpMethod.GET, httpRequest.requestLine().method());
+        assertEquals("/search?query=java", httpRequest.requestLine().fullPath());
         assertEquals("HTTP/1.1", httpRequest.requestLine().httpVersion());
         assertEquals("localhost", httpRequest.headers().get("Host"));
         assertEquals("keep-alive", httpRequest.headers().get("Connection"));

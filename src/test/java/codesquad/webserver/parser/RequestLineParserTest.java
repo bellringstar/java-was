@@ -3,6 +3,7 @@ package codesquad.webserver.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import codesquad.webserver.parser.enums.HttpMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -24,7 +25,7 @@ public class RequestLineParserTest {
         RequestLine result = requestLineParser.parse(in);
 
         // Then
-        assertEquals("GET", result.method());
+        assertEquals(HttpMethod.GET, result.method());
         assertEquals("/index.html", result.path());
         assertEquals("HTTP/1.1", result.httpVersion());
     }
