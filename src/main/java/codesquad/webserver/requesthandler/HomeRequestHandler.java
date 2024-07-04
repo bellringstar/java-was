@@ -1,0 +1,27 @@
+package codesquad.webserver.requesthandler;
+
+import static codesquad.webserver.httpresponse.HttpResponseBuilder.build;
+import static codesquad.webserver.httpresponse.HttpResponseBuilder.buildNotFoundResponse;
+
+import codesquad.webserver.FileReader;
+import codesquad.webserver.HttpRequest;
+import codesquad.webserver.httpresponse.HttpResponse;
+import java.io.File;
+import java.io.IOException;
+
+public class HomeRequestHandler extends AbstractRequestHandler {
+
+    public HomeRequestHandler(FileReader fileReader) {
+        super(fileReader);
+    }
+
+    @Override
+    protected HttpResponse handleGet(HttpRequest request) {
+        try {
+            File file = fileReader.read(request.requestLine().path());
+            return build(file);
+        } catch (IOException e) {
+            return buildNotFoundResponse();
+        }
+    }
+}
