@@ -1,15 +1,16 @@
 package codesquad.webserver.router;
 
 import codesquad.webserver.requesthandler.RequestHandler;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Router {
 
-    private static final Map<String, RequestHandler> ROUTES = new ConcurrentHashMap<>();
+    private static final Map<String, RequestHandler> ROUTES = new HashMap<>();
 
-    private Router() {}
+    private Router() {
+    }
 
     private static class Holder {
         private static final Router INSTANCE = new Router();

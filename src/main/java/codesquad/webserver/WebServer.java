@@ -15,6 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WebServer {
+
+    private static final int TCP_KEEP_ALIVE_TIME = 30000; //ms단위
+    private static final String KEEP_ALIVE = "keep-alive";
+    private static final String KEEP_ALIVE_CLOSE = "close";
+    private static final String KEEP_ALIVE_HEADER = "Connection";
+
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private final ExecutorService threadPool;
     private final int port;
@@ -40,13 +46,38 @@ public class WebServer {
         }
     }
 
+//    private void handleConnection(Socket client) {
+//        try (BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//             OutputStream outputStream = client.getOutputStream()) {
+//            HttpRequest request = HttpParser.parse(in);
+//            dispatcher.dispatch(request, outputStream);
+//        } catch (Exception e) {
+//            logger.error("Error while handling request", e);
+//        } finally {
+//            try {
+//                client.close();
+//            } catch (IOException e) {
+//                logger.error("Error while closing connection", e);
+//            }
+//        }
+//    }
+
     private void handleConnection(Socket client) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-             OutputStream outputStream = client.getOutputStream()) {
-            HttpRequest request = HttpParser.parse(in);
-            dispatcher.dispatch(request, outputStream);
+        try {
+            client.setSoTimeout(TCP_KEEP_ALIVE_TIME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            OutputStream out = client.getOutputStream();
+
+            while (true) {
+                HttpRequest request = HttpParser.parse(in);
+                dispatcher.dispatch(request, out);
+                if (isKeepAliveRequestClosed(request) || !isKeepAliveRequest(request)) {
+                    break;
+                }
+            }
+
         } catch (Exception e) {
-            logger.error("Error while handling request", e);
+            logger.error("Error while handling connection", e);
         } finally {
             try {
                 client.close();
@@ -55,4 +86,15 @@ public class WebServer {
             }
         }
     }
+
+    private boolean isKeepAliveRequest(HttpRequest request) {
+        String connection = request.headers().get(KEEP_ALIVE_HEADER);
+        return KEEP_ALIVE.equalsIgnoreCase(connection);
+    }
+
+    private boolean isKeepAliveRequestClosed(HttpRequest request) {
+        String closed = request.headers().get(KEEP_ALIVE_HEADER);
+        return KEEP_ALIVE_CLOSE.equalsIgnoreCase(closed);
+    }
+
 }

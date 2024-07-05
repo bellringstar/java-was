@@ -8,6 +8,7 @@ import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class StaticFileHandler extends AbstractRequestHandler {
 
@@ -18,7 +19,7 @@ public class StaticFileHandler extends AbstractRequestHandler {
     @Override
     protected HttpResponse handleGet(HttpRequest request) {
         try {
-            File file = fileReader.read(request.requestLine().path());
+            FileReader.FileResource file = fileReader.read(request.requestLine().path());
             return build(file);
         } catch (IOException e) {
             return buildNotFoundResponse();

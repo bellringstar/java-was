@@ -1,8 +1,9 @@
 package codesquad.webserver.httpresponse;
 
-import java.io.File;
+import codesquad.webserver.filereader.FileReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,22 +20,19 @@ public abstract class HttpResponseBuilder {
         MIME_TYPES.put("ico", "image/x-icon");
     }
 
-    public static HttpResponse build(File file) throws IOException {
-        if (file.exists() && file.isFile()) {
-            byte[] body = Files.readAllBytes(file.toPath());
-            String contentType = getContentType(file.getName());
+    public static HttpResponse build(FileReader.FileResource fileName) throws IOException {
+        byte[] body = readAllBytes(fileName.getInputStream());
+        String contentType = getContentType(fileName.getFileName());
 
-            Map<String, String> headers = new HashMap<>();
-            headers.put("Content-Type", contentType);
-            headers.put("Content-Length", String.valueOf(body.length));
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", contentType);
+        headers.put("Content-Length", String.valueOf(body.length));
 
-            return new HttpResponse(200, "OK", headers, body);
-        }
-        return buildNotFoundResponse();
+        return new HttpResponse(200, "OK", headers, body);
     }
 
     public static HttpResponse buildNotFoundResponse() {
-        String body = "<html><body><h1>Not Fond</h1></body></html>";
+        String body = "<html><body><h1>Not Found</h1></body></html>";
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/html");
         headers.put("Content-Length", String.valueOf(body.length()));
@@ -63,5 +61,16 @@ public abstract class HttpResponseBuilder {
             return MIME_TYPES.getOrDefault(extension, "application/octet-stream");
         }
         return "application/octet-stream";
+    }
+
+    private static byte[] readAllBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[1024];
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+        buffer.flush();
+        return buffer.toByteArray();
     }
 }

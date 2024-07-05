@@ -1,39 +1,68 @@
 package codesquad.webserver.filereader;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
+import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileReader {
-    private static Logger logger = LoggerFactory.getLogger(FileReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileReader.class);
     private static final String STATIC_DIRECTORY = "static";
     private static final String BASE_FILE = "index.html";
 
-    public File read(String requestPath) throws FileNotFoundException {
-        String fileName = requestPath.equals("/") ? "index.html" : requestPath.substring(1);
-        URL resource = getClass().getClassLoader().getResource(STATIC_DIRECTORY + "/" + fileName);
+    public FileResource read(String requestPath) throws FileNotFoundException {
+        String fileName = getFileName(requestPath);
+        String fullPath = STATIC_DIRECTORY + "/" + fileName;
+        InputStream inputStream = getResourceAsStream(fullPath);
 
-        logger.info("파일명 : " + fileName);
-        if (resource == null) {
+        if (inputStream == null && !requestPath.endsWith("/")) {
+            fullPath = STATIC_DIRECTORY + "/" + fileName + "/" + BASE_FILE;
+            inputStream = getResourceAsStream(fullPath);
+        }
+
+        if (inputStream == null && requestPath.endsWith("/")) {
+            fullPath = STATIC_DIRECTORY + "/" + fileName + BASE_FILE;
+            inputStream = getResourceAsStream(fullPath);
+        }
+
+        if (inputStream == null) {
             logger.error("File not found: " + fileName);
             throw new FileNotFoundException("File not found: " + fileName);
         }
 
-        File file = new File(resource.getFile());
+        logger.info("File found: " + fullPath);
+        return new FileResource(inputStream, getFileNameFromPath(fullPath));
+    }
 
-        if (!file.isFile()) {
-            file = new File(resource.getPath() + "/" + BASE_FILE);
+    private InputStream getResourceAsStream(String path) {
+        logger.info("Attempting to read: " + path);
+        return getClass().getClassLoader().getResourceAsStream(path);
+    }
+
+    private String getFileName(String requestPath) {
+        return requestPath.equals("/") ? BASE_FILE : requestPath.substring(1);
+    }
+
+    private String getFileNameFromPath(String path) {
+        String[] parts = path.split("/");
+        return parts[parts.length - 1];
+    }
+
+    public static class FileResource {
+        private final InputStream inputStream;
+        private final String fileName;
+
+        public FileResource(InputStream inputStream, String fileName) {
+            this.inputStream = inputStream;
+            this.fileName = fileName;
         }
 
-        if (!file.exists()) {
-            // todo: REST API요청일지도?
-            logger.error("File not found: " + fileName);
-            throw new FileNotFoundException("File not found: " + fileName);
+        public InputStream getInputStream() {
+            return inputStream;
         }
 
-        logger.info("File found: " + file.getPath());
-        return file;
+        public String getFileName() {
+            return fileName;
+        }
     }
 }

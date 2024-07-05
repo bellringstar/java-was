@@ -8,7 +8,6 @@ import codesquad.webserver.httpresponse.HttpResponseWriter;
 
 
 public class Main {
-
     private static final int PORT = 8080;
     private static final int THREAD_POOL_SIZE = 10;
 
