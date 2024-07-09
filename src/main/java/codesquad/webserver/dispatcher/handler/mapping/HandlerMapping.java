@@ -1,4 +1,4 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.handler.mapping;
 
 import codesquad.webserver.httprequest.HttpRequest;
 

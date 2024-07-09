@@ -1,4 +1,4 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.staticresouce;
 
 import codesquad.webserver.annotation.Component;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;

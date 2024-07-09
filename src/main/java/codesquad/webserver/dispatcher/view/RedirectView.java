@@ -1,4 +1,4 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.view;
 
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;

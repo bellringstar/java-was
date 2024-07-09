@@ -1,6 +1,11 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.view.resolver;
 
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.dispatcher.view.JsonView;
+import codesquad.webserver.dispatcher.view.ModelAndView;
+import codesquad.webserver.dispatcher.view.RedirectView;
+import codesquad.webserver.dispatcher.view.TemplateView;
+import codesquad.webserver.dispatcher.view.View;
 import codesquad.webserver.httprequest.HttpRequest;
 import java.util.Map;
 

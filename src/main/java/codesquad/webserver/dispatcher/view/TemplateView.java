@@ -1,10 +1,11 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.view;
 
 import codesquad.webserver.httpresponse.HttpResponse;
 import java.util.Map;
 
-public class JsonView implements View {
-    public JsonView(Map<String, Object> model) {
+
+public class TemplateView implements View {
+    public TemplateView(String viewName, Map<String, Object> model) {
     }
 
     @Override

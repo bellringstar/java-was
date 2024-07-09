@@ -1,4 +1,4 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.view;
 
 import java.util.Collections;
 import java.util.HashMap;

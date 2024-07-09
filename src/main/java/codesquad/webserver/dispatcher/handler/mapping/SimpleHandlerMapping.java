@@ -1,10 +1,11 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.handler.mapping;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.staticresouce.StaticResourceHandler;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
-import codesquad.webserver.requesthandler.UserCreateRequestHandler;
+import codesquad.webserver.dispatcher.requesthandler.UserCreateRequestHandler;
 import java.util.HashMap;
 import java.util.Map;
 

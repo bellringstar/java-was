@@ -1,4 +1,4 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.staticresouce;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;

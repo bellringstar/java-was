@@ -1,4 +1,4 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.staticresouce;
 
 public interface StaticResourceResolver {
 

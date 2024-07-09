@@ -1,9 +1,10 @@
-package codesquad.webserver.dispatcher;
+package codesquad.webserver.dispatcher.handler.adater;
 
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
-import codesquad.webserver.requesthandler.RequestHandler;
+import codesquad.webserver.dispatcher.requesthandler.RequestHandler;
 
 @Component
 public class SimpleHandlerAdapter implements HandlerAdapter {

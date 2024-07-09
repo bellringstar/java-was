@@ -1,4 +1,4 @@
-package codesquad.webserver.requesthandler;
+package codesquad.webserver.dispatcher.requesthandler;
 
 import static codesquad.webserver.httpresponse.HttpResponseBuilder.build;
 import static codesquad.webserver.httpresponse.HttpResponseBuilder.buildNotFoundResponse;
@@ -8,11 +8,11 @@ import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import java.io.IOException;
 
-public class HomeRequestHandler extends AbstractRequestHandler {
+public class RegisterRequestHandler extends AbstractRequestHandler {
 
-    private static final String FILE_PATH = "/index.html";
+    private static final String FILE_PATH = "/registration/index.html";
 
-    public HomeRequestHandler(FileReader fileReader) {
+    public RegisterRequestHandler(FileReader fileReader) {
         super(fileReader);
     }
 
