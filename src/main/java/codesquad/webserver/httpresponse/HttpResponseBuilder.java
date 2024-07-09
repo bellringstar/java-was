@@ -45,11 +45,11 @@ public abstract class HttpResponseBuilder {
     }
 
     public static HttpResponse buildMethodErrorResponse() {
-        return new HttpResponse(405, "Method Not Allowed");
+        return new HttpResponse(405, "Method Not Allowed", Collections.emptyMap(), null);
     }
 
     public static HttpResponse buildServerErrorResponse() {
-        return new HttpResponse(500, "Internal Server Error");
+        return new HttpResponse(500, "Internal Server Error", Collections.emptyMap(), null);
     }
 
     public static HttpResponse buildRedirectResponse(String location) {
