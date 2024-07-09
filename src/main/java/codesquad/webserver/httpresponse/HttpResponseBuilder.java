@@ -4,20 +4,24 @@ import codesquad.webserver.filereader.FileReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class HttpResponseBuilder {
-    private static final Map<String, String> MIME_TYPES = new HashMap<>();
+    public static final Map<String, String> MIME_TYPES;
     static {
-        MIME_TYPES.put("html", "text/html");
-        MIME_TYPES.put("css", "text/css");
-        MIME_TYPES.put("js", "application/javascript");
-        MIME_TYPES.put("jpg", "image/jpeg");
-        MIME_TYPES.put("png", "image/png");
-        MIME_TYPES.put("gif", "image/gif");
-        MIME_TYPES.put("svg", "image/svg+xml");
-        MIME_TYPES.put("ico", "image/x-icon");
+        Map<String, String> mimeTypes = new HashMap<>();
+        mimeTypes.put("html", "text/html");
+        mimeTypes.put("css", "text/css");
+        mimeTypes.put("js", "application/javascript");
+        mimeTypes.put("jpg", "image/jpeg");
+        mimeTypes.put("png", "image/png");
+        mimeTypes.put("gif", "image/gif");
+        mimeTypes.put("svg", "image/svg+xml");
+        mimeTypes.put("ico", "image/x-icon");
+
+        MIME_TYPES = Collections.unmodifiableMap(mimeTypes);
     }
 
     public static HttpResponse build(FileReader.FileResource fileName) throws IOException {
@@ -73,4 +77,6 @@ public abstract class HttpResponseBuilder {
         buffer.flush();
         return buffer.toByteArray();
     }
+
+
 }
