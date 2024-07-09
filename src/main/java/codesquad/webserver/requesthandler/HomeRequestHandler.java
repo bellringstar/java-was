@@ -10,6 +10,8 @@ import java.io.IOException;
 
 public class HomeRequestHandler extends AbstractRequestHandler {
 
+    private static final String FILE_PATH = "/index.html";
+
     public HomeRequestHandler(FileReader fileReader) {
         super(fileReader);
     }
@@ -17,7 +19,7 @@ public class HomeRequestHandler extends AbstractRequestHandler {
     @Override
     protected HttpResponse handleGet(HttpRequest request) {
         try {
-            FileReader.FileResource file = fileReader.read(request.requestLine().path());
+            FileReader.FileResource file = fileReader.read(FILE_PATH);
             return build(file);
         } catch (IOException e) {
             return buildNotFoundResponse();

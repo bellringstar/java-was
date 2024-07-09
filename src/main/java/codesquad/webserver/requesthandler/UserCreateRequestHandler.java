@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class UserCreateRequestHandler extends AbstractRequestHandler{
 
-    private static final String HOME_PATH = "/index.html";
+    private static final String HOME_PATH = "/main/index.html";
     private static final Logger logger = LoggerFactory.getLogger(UserCreateRequestHandler.class);
 
     public UserCreateRequestHandler(FileReader fileReader) {
