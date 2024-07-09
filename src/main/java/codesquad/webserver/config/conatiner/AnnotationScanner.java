@@ -1,4 +1,4 @@
-package codesquad.webserver.conatiner;
+package codesquad.webserver.config.conatiner;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;

@@ -1,7 +1,7 @@
 package codesquad;
 
-import codesquad.webserver.conatiner.ApplicationContext;
-import codesquad.webserver.conatiner.SimpleApplicationContext;
+import codesquad.webserver.config.conatiner.ApplicationContext;
+import codesquad.webserver.config.conatiner.SimpleApplicationContext;
 
 
 public class Main {

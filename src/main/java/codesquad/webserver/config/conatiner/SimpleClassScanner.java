@@ -1,4 +1,4 @@
-package codesquad.webserver.conatiner;
+package codesquad.webserver.config.conatiner;
 
 import java.io.File;
 import java.io.IOException;

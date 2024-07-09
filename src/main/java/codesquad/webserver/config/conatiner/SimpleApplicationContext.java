@@ -1,4 +1,4 @@
-package codesquad.webserver.conatiner;
+package codesquad.webserver.config.conatiner;
 
 import codesquad.webserver.WebServer;
 import codesquad.webserver.annotation.Component;

@@ -1,4 +1,4 @@
-package codesquad.webserver.conatiner;
+package codesquad.webserver.config.conatiner;
 
 public interface ApplicationContext {
 
