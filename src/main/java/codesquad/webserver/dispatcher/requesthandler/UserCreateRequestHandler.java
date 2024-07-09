@@ -7,13 +7,14 @@ import codesquad.webserver.db.UserDatabaseFactory;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import codesquad.webserver.model.User;
+import codesquad.webserver.parser.QueryStringParser;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UserCreateRequestHandler extends AbstractRequestHandler{
 
-    private static final String HOME_PATH = "/main/index.html";
+    private static final String HOME_PATH = "/index.html";
     private static final Logger logger = LoggerFactory.getLogger(UserCreateRequestHandler.class);
 
     public UserCreateRequestHandler(FileReader fileReader) {
@@ -21,9 +22,11 @@ public class UserCreateRequestHandler extends AbstractRequestHandler{
     }
 
     @Override
-    protected HttpResponse handleGet(HttpRequest request) {
+    protected HttpResponse handlePost(HttpRequest request) {
         UserDatabase userDatabase = UserDatabaseFactory.getInstance();
-        Map<String, String> params = request.params();
+        logger.info("body: {}", request.body());
+        Map<String, String> params = QueryStringParser.parse(request.body());
+        logger.info("params: {}", params);
         User user = User.of(params);
 
         userDatabase.save(user);

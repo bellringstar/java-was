@@ -17,7 +17,7 @@ public class QueryStringParserTest {
         String path = "/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1";
 
         // When
-        Map<String, String> params = QueryStringParser.parse(path);
+        Map<String, String> params = QueryStringParser.parseQueryString(path);
 
         // Then
         assertEquals(3, params.size(), "파싱된 쿼리 스트링의 파라미터 개수가 3개여야 합니다.");
