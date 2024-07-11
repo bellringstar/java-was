@@ -1,13 +1,11 @@
 package codesquad.webserver.filter;
 
+import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
-import codesquad.webserver.session.InMemorySessionManager;
 import codesquad.webserver.session.Session;
 import codesquad.webserver.session.SessionManager;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,38 +15,30 @@ public class SessionCheckFilter implements Filter {
     private static final String SESSION_KEY = "SID";
     private static final Logger logger = LoggerFactory.getLogger(SessionCheckFilter.class);
 
+    private final SessionManager sessionManager;
+
+    @Autowired
+    public SessionCheckFilter(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
     @Override
     public void doFilter(HttpRequest request, HttpResponse response, FilterChain chain) {
+        logger.error("protected:{}", isProtectedPath(request.requestLine().path()));
         if (isProtectedPath(request.requestLine().path()) && !hasValidSession(request)) {
-            HttpResponse forbiddenResponse = HttpResponseBuilder.buildForbiddenFromFile();
-            chain.setResponse(forbiddenResponse);
-            return;
+            logger.debug("세션이 존재하지 않는 사용자 요청: {}", request.requestLine().path());
+            HttpResponse redirectResponse = HttpResponseBuilder.redirect("/login").build();
+            chain.setResponse(redirectResponse);
         }
     }
 
     private boolean isProtectedPath(String path) {
-        return false; //TODO: 접근 거부 경로 추가
+        return path.equals("/user/list");
     }
 
     private boolean hasValidSession(HttpRequest request) {
-        List<String> cookie = request.headers().get("Cookie");
-        if (cookie == null || cookie.isEmpty()) {
-            return false;
-        }
-
-        Optional<String> sessionId = cookie.stream()
-                .flatMap(c -> List.of(c.split(";")).stream())
-                .map(String::trim)
-                .filter(c -> c.startsWith(SESSION_KEY + "="))
-                .map(c -> c.substring((SESSION_KEY + "=").length()))
-                .findFirst();
-
-        if (sessionId.isEmpty()) {
-            return false;
-        }
-
-        SessionManager sessionManager = InMemorySessionManager.getInstance();
-        Session session = sessionManager.getSession(sessionId.get());
+        Session session = sessionManager.getSession(request.getSessionIdFromRequest());
+        logger.error("세션 : {}", session);
         return session != null;
     }
 
