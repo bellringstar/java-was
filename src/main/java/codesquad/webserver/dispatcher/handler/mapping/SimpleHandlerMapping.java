@@ -2,7 +2,7 @@ package codesquad.webserver.dispatcher.handler.mapping;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;
-import codesquad.webserver.db.session.InMemorySessionManager;
+import codesquad.webserver.session.InMemorySessionManager;
 import codesquad.webserver.db.user.UserDatabaseFactory;
 import codesquad.webserver.dispatcher.requesthandler.LoginRequestHandler;
 import codesquad.webserver.dispatcher.requesthandler.UserCreateRequestHandler;

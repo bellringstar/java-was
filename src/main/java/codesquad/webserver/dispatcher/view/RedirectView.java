@@ -1,6 +1,6 @@
 package codesquad.webserver.dispatcher.view;
 
-import codesquad.webserver.db.cookie.HttpCookie;
+import codesquad.webserver.session.cookie.HttpCookie;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import java.util.ArrayList;

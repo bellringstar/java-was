@@ -1,9 +1,9 @@
 package codesquad.webserver.dispatcher.requesthandler;
 
-import codesquad.webserver.db.cookie.HttpCookie;
-import codesquad.webserver.db.cookie.HttpCookie.SameSite;
-import codesquad.webserver.db.session.Session;
-import codesquad.webserver.db.session.SessionManager;
+import codesquad.webserver.session.cookie.HttpCookie;
+import codesquad.webserver.session.cookie.HttpCookie.SameSite;
+import codesquad.webserver.session.Session;
+import codesquad.webserver.session.SessionManager;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;

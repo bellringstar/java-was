@@ -1,9 +1,7 @@
 package codesquad.webserver.httpresponse;
 
-import codesquad.webserver.annotation.Autowired;
-import codesquad.webserver.db.cookie.HttpCookie;
+import codesquad.webserver.session.cookie.HttpCookie;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

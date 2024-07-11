@@ -1,4 +1,4 @@
-package codesquad.webserver.db.cookie;
+package codesquad.webserver.session.cookie;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;

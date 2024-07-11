@@ -2,9 +2,9 @@ package codesquad.webserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import codesquad.webserver.db.cookie.HttpCookie;
-import codesquad.webserver.db.session.InMemorySessionManager;
-import codesquad.webserver.db.session.SessionManager;
+import codesquad.webserver.session.cookie.HttpCookie;
+import codesquad.webserver.session.InMemorySessionManager;
+import codesquad.webserver.session.SessionManager;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.db.user.UserDatabaseFactory;
 import codesquad.webserver.dispatcher.requesthandler.LoginRequestHandler;

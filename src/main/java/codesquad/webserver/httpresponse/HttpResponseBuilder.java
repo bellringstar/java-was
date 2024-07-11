@@ -1,6 +1,6 @@
 package codesquad.webserver.httpresponse;
 
-import codesquad.webserver.db.cookie.HttpCookie;
+import codesquad.webserver.session.cookie.HttpCookie;
 import codesquad.webserver.filereader.FileReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

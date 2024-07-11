@@ -8,6 +8,7 @@ import codesquad.webserver.dispatcher.view.RedirectView;
 import codesquad.webserver.dispatcher.view.TemplateView;
 import codesquad.webserver.dispatcher.view.View;
 import codesquad.webserver.httprequest.HttpRequest;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public class DefaultViewResolver implements ViewResolver {
         String viewName = modelAndView.getViewName();
         Map<String, Object> model = modelAndView.getModel();
 
-        Map<String, String> headers = request.headers();
+        Map<String, List<String>> headers = request.headers();
         if (viewName.startsWith("redirect:")) {
             return new RedirectView(viewName.substring(9), model);
         } else if (viewName.equals("jsonView")) {
