@@ -1,5 +1,6 @@
 package codesquad.webserver.session;
 
+import codesquad.webserver.annotation.Component;
 import codesquad.webserver.model.User;
 import java.util.Map;
 import java.util.UUID;
@@ -8,13 +9,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class InMemorySessionManager implements SessionManager {
 
     private final Map<String, Session> sessions = new ConcurrentHashMap<>();
     private static final long SESSION_TIMEOUT = 30 * 60 * 1000;
     private static final long SESSION_CLEANUP_INTERVAL = 15 * 60 * 1000; // 15분
 
-    private InMemorySessionManager() {
+    public InMemorySessionManager() {
         scheduleSessionCleanup();
     }
 
@@ -50,6 +52,11 @@ public class InMemorySessionManager implements SessionManager {
         sessions.entrySet().removeIf(entry ->
                 now - entry.getValue().getCreationTime() > SESSION_TIMEOUT
         );
+    }
+
+    @Override
+    public void invalidateSession(String sessionId) {
+        sessions.remove(sessionId);
     }
 
     @Override
