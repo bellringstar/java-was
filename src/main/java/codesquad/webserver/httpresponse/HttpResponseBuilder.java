@@ -32,14 +32,14 @@ public class HttpResponseBuilder {
 
     private int statusCode;
     private String statusMessage;
-    private final Map<String, String> headers;
+    private final List<HttpResponse.Header> headers;
     private final List<HttpCookie> cookies;
     private byte[] body;
 
     public HttpResponseBuilder() {
         this.statusCode = 200;
         this.statusMessage = "OK";
-        this.headers = new HashMap<>();
+        this.headers = new ArrayList<>();
         this.cookies = new ArrayList<>();
         this.body = new byte[0];
     }
@@ -55,7 +55,12 @@ public class HttpResponseBuilder {
     }
 
     public HttpResponseBuilder header(String name, String value) {
-        this.headers.put(name, value);
+        this.headers.add(new HttpResponse.Header(name, value));
+        return this;
+    }
+
+    public HttpResponseBuilder headers(Map<String, String> headers) {
+        headers.forEach(this::header);
         return this;
     }
 
@@ -78,7 +83,7 @@ public class HttpResponseBuilder {
         HttpResponse response = new HttpResponse();
         response.setStatusCode(statusCode);
         response.setStatusMessage(statusMessage);
-        headers.forEach(response::addHeader);
+        headers.forEach(header -> response.addHeader(header.getName(), header.getValue()));
         cookies.forEach(response::addCookie);
         response.setBody(body);
         return response;

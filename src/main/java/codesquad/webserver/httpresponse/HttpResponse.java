@@ -55,7 +55,7 @@ public class HttpResponse {
 
     public String getHeaderValue(String name) {
         List<String> values = getHeader(name);
-        return  values != null && !values.isEmpty() ? values.get(0) : null;
+        return values != null && !values.isEmpty() ? values.get(0) : null;
     }
 
     public List<Header> getHeaders() {
@@ -151,7 +151,7 @@ public class HttpResponse {
         }
     }
 
-    private static class Header {
+    public static class Header {
         private final String name;
         private final String value;
 
