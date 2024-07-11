@@ -15,6 +15,7 @@ import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.model.User;
 import codesquad.webserver.parser.RequestLine;
 import codesquad.webserver.parser.enums.HttpMethod;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,16 +130,16 @@ class UserAuthenticationIntegrationTest {
     }
 
     private HttpRequest createRegistrationRequest(String userId, String password, String name) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Content-Type", Collections.singletonList("application/x-www-form-urlencoded"));
         String body = String.format("userId=%s&password=%s&name=%s", userId, password, name);
         RequestLine requestLine = new RequestLine(HttpMethod.POST, "/create", "/create", "HTTP/1.1");
         return new HttpRequest(requestLine, headers, new HashMap<>(), body);
     }
 
     private HttpRequest createLoginRequest(String username, String password) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Content-Type", Collections.singletonList("application/x-www-form-urlencoded"));
         String body = String.format("username=%s&password=%s", username, password);
         RequestLine requestLine = new RequestLine(HttpMethod.POST, "/login", "/login", "HTTP/1.1");
         return new HttpRequest(requestLine, headers, new HashMap<>(), body);

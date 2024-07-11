@@ -13,7 +13,9 @@ import codesquad.webserver.parser.RequestLine;
 import codesquad.webserver.parser.enums.HttpMethod;
 import codesquad.webserver.staticresouce.DefaultStaticResourceResolver;
 import codesquad.webserver.staticresouce.StaticResourceHandler;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,8 +36,8 @@ public class UserRegistrationIntegrationTest {
     @DisplayName("post 로 성공적으로 회원가입")
     void testSuccessfulPostRegistration() throws Exception {
         // Given
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Content-Type", Collections.singletonList("application/x-www-form-urlencoded"));
 
         String body = "userId=testuser&password=password123&name=Test User";
         RequestLine requestLine = new RequestLine(HttpMethod.POST, "/create", "/create", "HTTP/1.1");
