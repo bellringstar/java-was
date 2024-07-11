@@ -1,5 +1,7 @@
 package codesquad.webserver.dispatcher.requesthandler;
 
+import codesquad.webserver.annotation.Autowired;
+import codesquad.webserver.annotation.Component;
 import codesquad.webserver.session.cookie.HttpCookie;
 import codesquad.webserver.session.cookie.HttpCookie.SameSite;
 import codesquad.webserver.session.Session;
@@ -11,15 +13,17 @@ import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import codesquad.webserver.model.User;
 import codesquad.webserver.parser.QueryStringParser;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class LoginRequestHandler extends AbstractRequestHandler {
 
-    private static final String REDIRECT_PATH = "/index.html";
+    private static final String REDIRECT_PATH = "/";
     private static final String LOGIN_FAIL_REDIRECT_PATH = "/user/login_failed.html";
     private static final String USERNAME_PARAM = "username";
     private static final String PASSWORD_PARAM = "password";
@@ -30,10 +34,20 @@ public class LoginRequestHandler extends AbstractRequestHandler {
     private final UserDatabase userDatabase;
     private final SessionManager sessionManager;
 
+    @Autowired
     public LoginRequestHandler(FileReader fileReader, UserDatabase userDatabase, SessionManager sessionManager) {
         super(fileReader);
         this.userDatabase = userDatabase;
         this.sessionManager = sessionManager;
+    }
+
+    @Override
+    protected HttpResponse handleGet(HttpRequest request) {
+        try {
+            return HttpResponseBuilder.buildFromFile(fileReader.read("/login/index.html"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -66,22 +80,11 @@ public class LoginRequestHandler extends AbstractRequestHandler {
         logger.debug("세선 생성 성공 {}", session.getId());
 
         HttpCookie sessionCookie = new HttpCookie(COOKIE_NAME, session.getId())
-                .setHttpOnly(true);
-
-        HttpCookie sessionCookie2 = new HttpCookie()
+                .setHttpOnly(true)
                 .setMaxAge(30 * 24 * 60 * 60);
 
-        HttpCookie sessionCookie3 = new HttpCookie()
-                .setSecure(true)
-                .setSameSite(SameSite.STRICT);
-
-        List<HttpCookie> cookies = new ArrayList<>();
-        cookies.add(sessionCookie);
-        cookies.add(sessionCookie2);
-        cookies.add(sessionCookie3);
-
         return HttpResponseBuilder.redirect(REDIRECT_PATH)
-                .cookies(cookies)
+                .cookie(sessionCookie)
                 .build();
     }
 
