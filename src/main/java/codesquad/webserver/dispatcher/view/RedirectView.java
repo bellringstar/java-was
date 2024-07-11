@@ -1,8 +1,9 @@
 package codesquad.webserver.dispatcher.view;
 
+import codesquad.webserver.db.cookie.HttpCookie;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,25 @@ public class RedirectView implements View {
 
     @Override
     public HttpResponse render(Map<String, ?> model) {
-        Map<String, List<String>> headers = (Map<String, List<String>>) model.get("headers");
-        return headers != null ? HttpResponseBuilder.buildRedirectResponse(url, headers) : HttpResponseBuilder.buildRedirectResponse(url);
+        List<HttpCookie> cookies = extractCookies(model);
+        return cookies != null && !cookies.isEmpty() ? HttpResponseBuilder.redirect(url).cookies(cookies).build()
+                : HttpResponseBuilder.redirect(url).build();
     }
+
+    private List<HttpCookie> extractCookies(Map<String, ?> model) {
+        List<HttpCookie> cookies = new ArrayList<>();
+        if (model.containsKey("cookies")) {
+            Object cookiesObj = model.get("cookies");
+            if (cookiesObj instanceof List) {
+                for (Object cookie : (List) cookiesObj) {
+                    if (cookie instanceof HttpCookie) {
+                        cookies.add((HttpCookie) cookie);
+                    }
+                }
+            }
+        }
+        return cookies;
+    }
+
+
 }

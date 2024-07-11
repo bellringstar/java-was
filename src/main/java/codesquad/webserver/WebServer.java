@@ -73,7 +73,6 @@ public class WebServer {
             } else {
                 response = dispatcherServlet.service(request);
             }
-
             writeResponse(outputStream, response);
         } catch (Exception e) {
             logger.error("Error while handling request", e);

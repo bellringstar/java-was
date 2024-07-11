@@ -15,7 +15,7 @@ public class SessionCheckFilter implements Filter {
     @Override
     public HttpResponse doFilter(HttpRequest request) {
         if (isProtectedPath(request.requestLine().path()) && !hasValidSession(request)) {
-            return HttpResponseBuilder.buildNotFoundResponse(); //TODO: 권한 없음 페이지 변경
+            return HttpResponseBuilder.notFound().build(); //TODO: 권한 없음 페이지 변경
         }
         return null; // 필터 통과
     }
@@ -28,5 +28,8 @@ public class SessionCheckFilter implements Filter {
         return request.headers().containsKey(SESSION_KEY);
     }
 
-
+    @Override
+    public int getOrder() {
+        return 1;
+    }
 }

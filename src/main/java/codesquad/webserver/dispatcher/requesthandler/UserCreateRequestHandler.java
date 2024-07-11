@@ -29,6 +29,6 @@ public class UserCreateRequestHandler extends AbstractRequestHandler {
 
         userDatabase.save(user);
         logger.debug("사용자 저장 : {}", user);
-        return HttpResponseBuilder.buildRedirectResponse(HOME_PATH);
+        return HttpResponseBuilder.redirect(HOME_PATH).build();
     }
 }

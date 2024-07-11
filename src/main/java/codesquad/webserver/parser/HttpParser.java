@@ -17,6 +17,8 @@ public abstract class HttpParser {
         Map<String, String> params = QueryStringParser.parseQueryString(requestLine.fullPath());
         String body = BodyParser.parse(in, headers);
 
-        return new HttpRequest(requestLine, headers, params, body);
+        HttpRequest httpRequest = new HttpRequest(requestLine, headers, params, body);
+        logger.info("httpRequest : {}", httpRequest);
+        return httpRequest;
     }
 }

@@ -2,6 +2,7 @@ package codesquad.webserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import codesquad.webserver.db.cookie.HttpCookie;
 import codesquad.webserver.db.session.InMemorySessionManager;
 import codesquad.webserver.db.session.SessionManager;
 import codesquad.webserver.db.user.UserDatabase;
@@ -57,7 +58,7 @@ class UserAuthenticationIntegrationTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(302);
-        assertThat(response.getHeaders().get("Location").get(0)).isEqualTo("/index.html");
+        assertThat(getHeaderValue(response, "Location")).isEqualTo("/index.html");
 
         User user = userDatabase.findByUserId("newuser");
         assertThat(user).isNotNull();
@@ -78,17 +79,20 @@ class UserAuthenticationIntegrationTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(302);
-        assertThat(response.getHeaders().get("Location").get(0)).isEqualTo("/index.html");
+        assertThat(getHeaderValue(response, "Location")).isEqualTo("/index.html");
 
-        List<String> cookies = response.getHeaders().get("Set-Cookie");
-        assertThat(cookies).isNotNull();
+        List<HttpCookie> cookies = response.getCookies();
+        assertThat(cookies).isNotEmpty();
 
-        String sessionId = cookies.get(0).split("=")[1];
-        String path = cookies.get(1);
-        assertThat(sessionId).isNotBlank();
-        assertThat(path).isEqualTo("Path=/");
+        HttpCookie sessionCookie = cookies.stream()
+                .filter(c -> c.getName().equals("SID"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Session cookie not found"));
 
-        User sessionUser = sessionManager.getSession(sessionId).getUser();
+        assertThat(sessionCookie.getValue()).isNotBlank();
+        assertThat(sessionCookie.getPath()).isEqualTo("/");
+
+        User sessionUser = sessionManager.getSession(sessionCookie.getValue()).getUser();
         assertThat(sessionUser).isNotNull();
         assertThat(sessionUser.getUserId()).isEqualTo("testuser");
     }
@@ -105,8 +109,8 @@ class UserAuthenticationIntegrationTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(302);
-        assertThat(response.getHeaders().get("Location").get(0)).isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeaders().get("Set-Cookie")).isNull();
+        assertThat(getHeaderValue(response, "Location")).isEqualTo("/user/login_failed.html");
+        assertThat(response.getCookies()).isEmpty();
     }
 
     @Test
@@ -120,8 +124,8 @@ class UserAuthenticationIntegrationTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(302);
-        assertThat(response.getHeaders().get("Location").get(0)).isEqualTo("/user/login_failed.html");
-        assertThat(response.getHeaders().get("Set-Cookie")).isNull();
+        assertThat(getHeaderValue(response, "Location")).isEqualTo("/user/login_failed.html");
+        assertThat(response.getCookies()).isEmpty();
     }
 
     private HttpRequest createRegistrationRequest(String userId, String password, String name) {
@@ -138,5 +142,10 @@ class UserAuthenticationIntegrationTest {
         String body = String.format("username=%s&password=%s", username, password);
         RequestLine requestLine = new RequestLine(HttpMethod.POST, "/login", "/login", "HTTP/1.1");
         return new HttpRequest(requestLine, headers, new HashMap<>(), body);
+    }
+
+    private String getHeaderValue(HttpResponse response, String headerName) {
+        List<String> values = response.getHeader(headerName);
+        return values != null && !values.isEmpty() ? values.get(0) : null;
     }
 }

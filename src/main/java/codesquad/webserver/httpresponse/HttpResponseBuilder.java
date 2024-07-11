@@ -1,19 +1,17 @@
 package codesquad.webserver.httpresponse;
 
+import codesquad.webserver.db.cookie.HttpCookie;
 import codesquad.webserver.filereader.FileReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class HttpResponseBuilder {
-    public static final Map<String, String> MIME_TYPES;
+public class HttpResponseBuilder {
     private static final Logger log = LoggerFactory.getLogger(HttpResponseBuilder.class);
+    public static final Map<String, String> MIME_TYPES;
 
     static {
         Map<String, String> mimeTypes = new HashMap<>();
@@ -25,76 +23,96 @@ public abstract class HttpResponseBuilder {
         mimeTypes.put("gif", "image/gif");
         mimeTypes.put("svg", "image/svg+xml");
         mimeTypes.put("ico", "image/x-icon");
-
         MIME_TYPES = Collections.unmodifiableMap(mimeTypes);
     }
 
-    public static HttpResponse build(int statusCode, String statusMessage, Map<String, List<String>> headers,
-                                     byte[] body) {
-        HttpResponse.Builder builder = HttpResponse.builder()
-                .statusCode(statusCode)
-                .statusMessage(statusMessage);
+    private int statusCode;
+    private String statusMessage;
+    private final Map<String, String> headers;
+    private final List<HttpCookie> cookies;
+    private byte[] body;
 
-        if (headers != null) {
-            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-                builder.header(entry.getKey(), entry.getValue());
-            }
-        }
-
-        if (body != null) {
-            builder.body(body);
-        }
-
-        return builder.build();
+    public HttpResponseBuilder() {
+        this.statusCode = 200;
+        this.statusMessage = "OK";
+        this.headers = new HashMap<>();
+        this.cookies = new ArrayList<>();
+        this.body = new byte[0];
     }
 
-    public static HttpResponse build(FileReader.FileResource fileName) throws IOException {
-        byte[] body = readAllBytes(fileName.getInputStream());
-        String contentType = getContentType(fileName.getFileName());
-
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.put("Content-Type", Collections.singletonList(contentType));
-        headers.put("Content-Length", Collections.singletonList(String.valueOf(body.length)));
-
-        return build(200, "OK", headers, body);
+    public HttpResponseBuilder statusCode(int statusCode) {
+        this.statusCode = statusCode;
+        return this;
     }
 
-    public static HttpResponse buildNotFoundResponse() {
-        FileReader fileReader = new FileReader();
-        byte[] body;
-        try {
-            body = readAllBytes(fileReader.read("/404.html").getInputStream());
-        } catch (Exception e) {
-            body = "<html><body>NOT FOUND</body></html>".getBytes();
-        }
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.put("Content-Type", Collections.singletonList("text/html"));
-        headers.put("Content-Length", Collections.singletonList(String.valueOf(body.length)));
-
-        return build(404, "Not Found", headers, body);
+    public HttpResponseBuilder statusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+        return this;
     }
 
-    public static HttpResponse buildMethodErrorResponse() {
-        return build(405, "Method Not Allowed", Collections.emptyMap(), null);
+    public HttpResponseBuilder header(String name, String value) {
+        this.headers.put(name, value);
+        return this;
     }
 
-    public static HttpResponse buildServerErrorResponse() {
-        return build(500, "Internal Server Error", Collections.emptyMap(), null);
+    public HttpResponseBuilder cookie(HttpCookie cookie) {
+        this.cookies.add(cookie);
+        return this;
     }
 
-    public static HttpResponse buildRedirectResponse(String location) {
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.put("Location", Collections.singletonList(location));
-        return build(302, "Found", headers, null);
+    public HttpResponseBuilder cookies(List<HttpCookie> cookies) {
+        this.cookies.addAll(cookies);
+        return this;
     }
 
-    public static HttpResponse buildRedirectResponse(String location, Map<String, List<String>> inputHeaders) {
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.putAll(inputHeaders);
-        headers.put("Location", Collections.singletonList(location));
-        return build(302, "Found", headers, null);
+    public HttpResponseBuilder body(byte[] body) {
+        this.body = body;
+        return this;
     }
 
+    public HttpResponse build() {
+        HttpResponse response = new HttpResponse();
+        response.setStatusCode(statusCode);
+        response.setStatusMessage(statusMessage);
+        headers.forEach(response::addHeader);
+        cookies.forEach(response::addCookie);
+        response.setBody(body);
+        return response;
+    }
+
+    public static HttpResponseBuilder ok() {
+        return new HttpResponseBuilder().statusCode(200).statusMessage("OK");
+    }
+
+    public static HttpResponseBuilder notFound() {
+        return new HttpResponseBuilder().statusCode(404).statusMessage("Not Found");
+    }
+
+    public static HttpResponseBuilder redirect(String location) {
+        return new HttpResponseBuilder()
+                .statusCode(302)
+                .statusMessage("Found")
+                .header("Location", location);
+    }
+
+    public static HttpResponseBuilder methodNotAllowed() {
+        return new HttpResponseBuilder().statusCode(405).statusMessage("Method Not Allowed");
+    }
+
+    public static HttpResponseBuilder serverError() {
+        return new HttpResponseBuilder().statusCode(500).statusMessage("Internal Server Error");
+    }
+
+    public static HttpResponse buildFromFile(FileReader.FileResource resource) throws IOException {
+        byte[] body = readAllBytes(resource.getInputStream());
+        String contentType = getContentType(resource.getFileName());
+
+        return ok()
+                .header("Content-Type", contentType)
+                .header("Content-Length", String.valueOf(body.length))
+                .body(body)
+                .build();
+    }
 
     private static String getContentType(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
@@ -115,5 +133,4 @@ public abstract class HttpResponseBuilder {
         buffer.flush();
         return buffer.toByteArray();
     }
-
 }

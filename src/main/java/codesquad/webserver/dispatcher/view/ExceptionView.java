@@ -17,8 +17,8 @@ public class ExceptionView implements View {
         }
 
         if (statusCode == 405) {
-            return HttpResponseBuilder.buildMethodErrorResponse();
+            return HttpResponseBuilder.methodNotAllowed().build();
         }
-        return HttpResponseBuilder.buildNotFoundResponse();
+        return HttpResponseBuilder.methodNotAllowed().build();
     }
 }

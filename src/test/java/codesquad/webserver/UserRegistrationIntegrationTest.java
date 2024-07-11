@@ -1,6 +1,6 @@
 package codesquad.webserver;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import codesquad.webserver.dispatcher.DispatcherServlet;
 import codesquad.webserver.dispatcher.handler.adater.SimpleHandlerAdapter;
@@ -16,6 +16,7 @@ import codesquad.webserver.staticresouce.StaticResourceHandler;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserRegistrationIntegrationTest {
@@ -30,6 +31,7 @@ public class UserRegistrationIntegrationTest {
     }
 
     @Test
+    @DisplayName("post 로 성공적으로 회원가입")
     void testSuccessfulPostRegistration() throws Exception {
         // Given
         Map<String, String> headers = new HashMap<>();
@@ -44,10 +46,11 @@ public class UserRegistrationIntegrationTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(302);
-        assertThat(response.getHeaders().get("Location")).isEqualTo("/index.html");
+        assertThat(response.getHeaderValue("Location")).isEqualTo("/index.html");
     }
 
     @Test
+    @DisplayName("GET으로 회원가입 실패")
     void testFailedGetRegistration() throws Exception {
         // Given
         RequestLine requestLine = new RequestLine(HttpMethod.GET, "/create",

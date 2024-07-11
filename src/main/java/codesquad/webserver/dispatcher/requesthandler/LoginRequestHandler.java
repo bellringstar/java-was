@@ -1,5 +1,7 @@
 package codesquad.webserver.dispatcher.requesthandler;
 
+import codesquad.webserver.db.cookie.HttpCookie;
+import codesquad.webserver.db.cookie.HttpCookie.SameSite;
 import codesquad.webserver.db.session.Session;
 import codesquad.webserver.db.session.SessionManager;
 import codesquad.webserver.db.user.UserDatabase;
@@ -9,8 +11,7 @@ import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import codesquad.webserver.model.User;
 import codesquad.webserver.parser.QueryStringParser;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -22,8 +23,7 @@ public class LoginRequestHandler extends AbstractRequestHandler {
     private static final String LOGIN_FAIL_REDIRECT_PATH = "/user/login_failed.html";
     private static final String USERNAME_PARAM = "username";
     private static final String PASSWORD_PARAM = "password";
-    private static final String COOKIE_NAME = "JID";
-    private static final String COOKIE_PATH = "Path=/";
+    private static final String COOKIE_NAME = "SID";
 
     private static final Logger logger = LoggerFactory.getLogger(LoginRequestHandler.class);
 
@@ -64,12 +64,24 @@ public class LoginRequestHandler extends AbstractRequestHandler {
     private HttpResponse createSuccessResponse(User user) {
         Session session = sessionManager.createSession(user);
         logger.debug("세선 생성 성공 {}", session.getId());
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.put("Set-Cookie", Arrays.asList(COOKIE_NAME + "=" + session.getId(), COOKIE_PATH));
-        return HttpResponseBuilder.buildRedirectResponse(REDIRECT_PATH, headers);
+
+        HttpCookie sessionCookie = new HttpCookie(COOKIE_NAME, session.getId())
+                .setHttpOnly(true);
+
+        HttpCookie sessionCookie2 = new HttpCookie()
+                .setMaxAge(30 * 24 * 60 * 60);
+
+        List<HttpCookie> cookies = new ArrayList<>();
+        cookies.add(sessionCookie);
+        cookies.add(sessionCookie2);
+
+        return HttpResponseBuilder.redirect(REDIRECT_PATH)
+                .cookies(cookies)
+                .build();
     }
 
     private HttpResponse createFailureResponse() {
-        return HttpResponseBuilder.buildRedirectResponse(LOGIN_FAIL_REDIRECT_PATH);
+        return HttpResponseBuilder.redirect(LOGIN_FAIL_REDIRECT_PATH)
+                .build();
     }
 }

@@ -6,6 +6,7 @@ import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.dispatcher.requesthandler.RequestHandler;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ public class SimpleHandlerAdapter implements HandlerAdapter {
     public ModelAndView handle(HttpRequest request, Object handler) {
         if (!supports(handler)) {
             logger.error("Handler not supported");
-            return convertToModelAndView(HttpResponseBuilder.buildNotFoundResponse());
+            return convertToModelAndView(HttpResponseBuilder.notFound().build());
         }
 
         RequestHandler requestHandler = (RequestHandler) handler;
@@ -32,11 +33,10 @@ public class SimpleHandlerAdapter implements HandlerAdapter {
     }
 
     private ModelAndView convertToModelAndView(HttpResponse response) {
-
         ModelAndView mv;
 
         if (response.getStatusCode() == 302) {
-            String redirectUrl = response.getHeaders().get("Location").get(0);
+            String redirectUrl = getHeaderValue(response, "Location");
             mv =  new ModelAndView("redirect:" + redirectUrl);
         } else if (response.getStatusCode() == 404) {
             mv = new ModelAndView("exception");
@@ -46,7 +46,16 @@ public class SimpleHandlerAdapter implements HandlerAdapter {
 
         mv.addAttribute("statusCode", response.getStatusCode());
         mv.addAttribute("headers", response.getHeaders());
+        mv.addAttribute("cookies", response.getCookies());
         mv.addAttribute("body", response.getBody());
         return mv;
+    }
+
+    private String getHeaderValue(HttpResponse response, String headerName) {
+        List<String> headerValues = response.getHeader(headerName);
+        if (headerValues != null && !headerValues.isEmpty()) {
+            return headerValues.get(0);
+        }
+        return null;
     }
 }

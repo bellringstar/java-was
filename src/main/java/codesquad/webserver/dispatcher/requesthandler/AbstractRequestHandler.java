@@ -46,6 +46,6 @@ public abstract class AbstractRequestHandler implements RequestHandler {
     }
 
     protected HttpResponse handleMethodNotAllowed() {
-        return HttpResponseBuilder.buildMethodErrorResponse();
+        return HttpResponseBuilder.methodNotAllowed().build();
     }
 }
