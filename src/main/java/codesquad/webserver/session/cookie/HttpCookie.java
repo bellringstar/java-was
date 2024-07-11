@@ -1,6 +1,7 @@
 package codesquad.webserver.session.cookie;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +32,6 @@ public class HttpCookie {
     }
 
     public HttpCookie() {
-
     }
 
     public String getName() {
@@ -116,58 +116,37 @@ public class HttpCookie {
 
     public String toSetCookieHeader() {
         StringBuilder sb = new StringBuilder();
+
         if (name != null) {
             sb.append(name).append("=").append(value);
         }
 
         if (domain != null) {
-            if (sb.isEmpty()) {
-                sb.append("Domain=").append(domain);
-            } else {
-                sb.append("; Domain=").append(domain);
-            }
+            sb.append("; Domain=").append(domain);
         }
+
         if (path != null) {
-            if (sb.isEmpty()) {
-                sb.append("Path=").append(path);
-            } else {
-                sb.append("; Path=").append(path);
-            }
+            sb.append("; Path=").append(path);
         }
+
         if (expires != null) {
-            if (sb.isEmpty()) {
-                sb.append("Expires=").append(expires);
-            } else {
-                sb.append("; Expires=").append(expires);
-            }
+            sb.append("; Expires=").append(expires.format(DateTimeFormatter.RFC_1123_DATE_TIME));
         }
+
         if (maxAge != null) {
-            if (sb.isEmpty()) {
-                sb.append("Max-Age=").append(maxAge);
-            } else {
-                sb.append("; Max-Age=").append(maxAge);
-            }
+            sb.append("; Max-Age=").append(maxAge);
         }
+
         if (secure) {
-            if (sb.isEmpty()) {
-                sb.append("Secure=").append(secure);
-            } else {
-                sb.append("; Secure");
-            }
+            sb.append("; Secure");
         }
+
         if (httpOnly) {
-            if (sb.isEmpty()) {
-                sb.append("HttpOnly");
-            } else {
-                sb.append("; HttpOnly");
-            }
+            sb.append("; HttpOnly");
         }
+
         if (sameSite != null) {
-            if (sb.isEmpty()) {
-                sb.append("SameSite=").append(sameSite);
-            } else {
-                sb.append("; SameSite=").append(sameSite);
-            }
+            sb.append("; SameSite=").append(sameSite.name());
         }
 
         for (Entry<String, String> entry : additionalAttributes.entrySet()) {
