@@ -38,6 +38,8 @@ public class SimpleHandlerAdapter implements HandlerAdapter {
         if (response.getStatusCode() == 302) {
             String redirectUrl = getHeaderValue(response, "Location");
             mv =  new ModelAndView("redirect:" + redirectUrl);
+        } else if (response.getStatusCode() == 200) {
+            mv = new ModelAndView("templateView");
         } else if (response.getStatusCode() == 404) {
             mv = new ModelAndView("exception");
         } else {
