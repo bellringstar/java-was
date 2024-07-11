@@ -13,11 +13,12 @@ public class SessionCheckFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(SessionCheckFilter.class);
 
     @Override
-    public HttpResponse doFilter(HttpRequest request) {
+    public void doFilter(HttpRequest request, HttpResponse response, FilterChain chain) {
         if (isProtectedPath(request.requestLine().path()) && !hasValidSession(request)) {
-            return HttpResponseBuilder.notFound().build(); //TODO: 권한 없음 페이지 변경
+            HttpResponse forbiddenResponse = HttpResponseBuilder.buildForbiddenFromFile();
+            chain.setResponse(forbiddenResponse);
+            return;
         }
-        return null; // 필터 통과
     }
 
     private boolean isProtectedPath(String path) {

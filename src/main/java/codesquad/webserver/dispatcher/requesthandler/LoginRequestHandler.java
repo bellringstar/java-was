@@ -71,9 +71,14 @@ public class LoginRequestHandler extends AbstractRequestHandler {
         HttpCookie sessionCookie2 = new HttpCookie()
                 .setMaxAge(30 * 24 * 60 * 60);
 
+        HttpCookie sessionCookie3 = new HttpCookie()
+                .setSecure(true)
+                .setSameSite(SameSite.STRICT);
+
         List<HttpCookie> cookies = new ArrayList<>();
         cookies.add(sessionCookie);
         cookies.add(sessionCookie2);
+        cookies.add(sessionCookie3);
 
         return HttpResponseBuilder.redirect(REDIRECT_PATH)
                 .cookies(cookies)

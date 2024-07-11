@@ -5,7 +5,11 @@ import codesquad.webserver.filereader.FileReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,6 +92,33 @@ public class HttpResponseBuilder {
         return new HttpResponseBuilder().statusCode(404).statusMessage("Not Found");
     }
 
+    public static HttpResponse buildNotFoundFromFile() {
+        try {
+            return buildFromFile(new FileReader().read("/404.html"), 404, "NotFound");
+        } catch (IOException e) {
+            return notFound()
+                    .body("NotFound".getBytes())
+                    .build();
+        }
+    }
+
+    public static HttpResponseBuilder forbidden() {
+        return new HttpResponseBuilder()
+                .statusCode(403)
+                .statusMessage("Forbidden")
+                .header("Content-Type", "text/html");
+    }
+
+    public static HttpResponse buildForbiddenFromFile() {
+        try {
+            return buildFromFile(new FileReader().read("/403.html"), 403, "Forbidden");
+        } catch (IOException e) {
+            return forbidden()
+                    .body("Forbidden".getBytes())
+                    .build();
+        }
+    }
+
     public static HttpResponseBuilder redirect(String location) {
         return new HttpResponseBuilder()
                 .statusCode(302)
@@ -101,6 +132,20 @@ public class HttpResponseBuilder {
 
     public static HttpResponseBuilder serverError() {
         return new HttpResponseBuilder().statusCode(500).statusMessage("Internal Server Error");
+    }
+
+    public static HttpResponse buildFromFile(FileReader.FileResource resource, int statusCode, String statusMessage)
+            throws IOException {
+        byte[] body = readAllBytes(resource.getInputStream());
+        String contentType = getContentType(resource.getFileName());
+
+        return new HttpResponseBuilder()
+                .statusCode(statusCode)
+                .statusMessage(statusMessage)
+                .header("Content-Type", contentType)
+                .header("Content-Length", String.valueOf(body.length))
+                .body(body)
+                .build();
     }
 
     public static HttpResponse buildFromFile(FileReader.FileResource resource) throws IOException {

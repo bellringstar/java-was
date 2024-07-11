@@ -94,6 +94,11 @@ public class HttpCookie {
         return this;
     }
 
+    public HttpCookie setSecure(boolean secure) {
+        this.secure = secure;
+        return this;
+    }
+
     public HttpCookie setHttpOnly(boolean httpOnly) {
         this.httpOnly = httpOnly;
         return this;

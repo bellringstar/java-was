@@ -67,7 +67,9 @@ public class WebServer {
             HttpRequest request = createHttpRequest(in);
             HttpResponse response = filterChain.doFilter(request);
 
-            if (response == null && staticResourceResolver.isStaticResource(request.requestLine().path())) {
+            if (response.getStatusCode() != 200) {
+
+            } else if (staticResourceResolver.isStaticResource(request.requestLine().path())) {
                 logger.debug("정적 경로 처리 중 : {}", request.requestLine().path());
                 response = staticResourceHandler.handleRequest(request);
             } else {
