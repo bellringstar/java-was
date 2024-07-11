@@ -47,7 +47,9 @@ public class SimpleHandlerMapping implements HandlerMapping {
     }
 
     private void initHandlers() {
+        handlers.put("", homeRequestHandler);
         handlers.put("/", homeRequestHandler);
+        handlers.put("/index.html", homeRequestHandler);
         handlers.put("/register", registerRequestHandler);
         handlers.put("/create", userCreateRequestHandler);
         handlers.put("/login", loginRequestHandler);

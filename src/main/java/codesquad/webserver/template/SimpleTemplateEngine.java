@@ -27,13 +27,11 @@ public class SimpleTemplateEngine implements TemplateEngine {
     private String processVariables(String template, Map<String, Object> model) {
         Pattern pattern = Pattern.compile("\\{\\{\\s*(\\w+(?:\\.\\w+)*)\\s*\\}\\}");
         Matcher matcher = pattern.matcher(template);
-        logger.error("content: {} itemModel: {}", template, model);
 
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String key = matcher.group(1);
             Object value = resolveKey(key, model);
-            logger.error("변수 처리 " + key + " = " + value);
             matcher.appendReplacement(sb, value != null ? value.toString() : "");
         }
         matcher.appendTail(sb);
@@ -76,7 +74,6 @@ public class SimpleTemplateEngine implements TemplateEngine {
             String ifContent = matcher.group(2);
             String elseContent = matcher.group(3);
             Object value = resolveKey(key, model);
-            logger.error("조건문 처리 " + key + " = " + value);
             if (value != null && Boolean.parseBoolean(value.toString())) {
                 matcher.appendReplacement(sb, ifContent);
             } else {

@@ -16,7 +16,9 @@ public class InMemoryUserDatabase implements UserDatabase {
     private final ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
 
     public InMemoryUserDatabase() {
-        users.put("1", new User("1", "1", "1"));
+        users.put("1", new User("1", "1", "1번 유저"));
+        users.put("2", new User("2", "2", "2번 유저"));
+        users.put("3", new User("3", "3", "3번 유저"));
     }
 
     @Override

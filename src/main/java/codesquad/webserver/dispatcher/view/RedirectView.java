@@ -1,27 +1,27 @@
 package codesquad.webserver.dispatcher.view;
 
+import codesquad.webserver.annotation.Component;
+import codesquad.webserver.httpresponse.HttpResponse.Header;
 import codesquad.webserver.session.cookie.HttpCookie;
-import codesquad.webserver.httpresponse.HttpResponse;
-import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class RedirectView implements View {
 
-    private final String url;
-    private final Map<String, Object> model;
-
-    public RedirectView(String url, Map<String, Object> model) {
-        this.url = url;
-        this.model = model;
-    }
-
     @Override
-    public HttpResponse render(Map<String, ?> model) {
+    public ViewResult render(Map<String, ?> model) {
+        String url = (String) model.get("redirectUrl");
+        if (url == null) {
+            throw new IllegalStateException("redirectUrl cannot be null");
+        }
+
         List<HttpCookie> cookies = extractCookies(model);
-        return cookies != null && !cookies.isEmpty() ? HttpResponseBuilder.redirect(url).cookies(cookies).build()
-                : HttpResponseBuilder.redirect(url).build();
+        List<Header> headers = new ArrayList<>();
+        headers.add(new Header("Location", url));
+
+        return new ViewResult(new byte[0], cookies, headers, 302);
     }
 
     private List<HttpCookie> extractCookies(Map<String, ?> model) {
@@ -38,6 +38,4 @@ public class RedirectView implements View {
         }
         return cookies;
     }
-
-
 }

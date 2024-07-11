@@ -2,20 +2,16 @@ package codesquad.webserver.dispatcher.requesthandler;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.dispatcher.view.ModelAndView;
+import codesquad.webserver.dispatcher.view.ModelKey;
+import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
-import codesquad.webserver.httpresponse.HttpResponse;
-import codesquad.webserver.httpresponse.HttpResponseBuilder;
 import codesquad.webserver.model.User;
+import codesquad.webserver.session.Session;
 import codesquad.webserver.session.SessionManager;
-import codesquad.webserver.template.TemplateEngine;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,22 +21,21 @@ public class HomeRequestHandler extends AbstractRequestHandler {
     private static final String FILE_PATH = "/index.html";
     private static final Logger logger = LoggerFactory.getLogger(HomeRequestHandler.class);
 
-    private final TemplateEngine templateEngine;
     private final SessionManager sessionManager;
 
     @Autowired
-    public HomeRequestHandler(FileReader fileReader, TemplateEngine templateEngine, SessionManager sessionManager) {
+    public HomeRequestHandler(FileReader fileReader, SessionManager sessionManager) {
         super(fileReader);
-        this.templateEngine = templateEngine;
         this.sessionManager = sessionManager;
     }
 
     @Override
-    protected HttpResponse handleGet(HttpRequest request) {
+    protected ModelAndView handleGet(HttpRequest request) {
         try {
             FileReader.FileResource file = fileReader.read(FILE_PATH);
-            String fileContent = readFileContent(file);
-            Map<String, Object> model = new HashMap<>();
+            String fileContent = file.readFileContent();
+            ModelAndView mv = new ModelAndView(ViewName.TEMPLATE_VIEW);
+            mv.addAttribute(ModelKey.CONTENT, fileContent);
 
             String sessionId = null;
             try {
@@ -51,31 +46,31 @@ public class HomeRequestHandler extends AbstractRequestHandler {
 
             User user = null;
             if (sessionId != null) {
-                user = Optional.ofNullable(sessionManager.getSession(sessionId)).map(session -> session.getUser())
+                user = Optional.ofNullable(sessionManager.getSession(sessionId))
+                        .map(Session::getUser)
                         .orElse(null);
             }
 
             if (user != null) {
-                model.put("isLoggedIn", true);
-                model.put("username", user.getName());
+                mv.addAttribute("isLoggedIn", true);
+                mv.addAttribute("username", user.getName());
             } else {
-                model.put("isLoggedIn", false);
+                mv.addAttribute("isLoggedIn", false);
             }
 
-            String content = templateEngine.render(fileContent, model);
-            return HttpResponseBuilder.ok().body(content.getBytes()).build();
+            return mv;
         } catch (IOException e) {
             logger.error("Error reading file: {}", e.getMessage());
-            return HttpResponseBuilder.notFound().build();
+            return new ModelAndView(ViewName.EXCEPTION_VIEW)
+                    .addAttribute(ModelKey.STATUS_CODE, 404)
+                    .addAttribute(ModelKey.ERROR_MESSAGE, "File not found");
+
         } catch (Exception e) {
             logger.error("Unhandled exception: {}", e.getMessage());
-            return HttpResponseBuilder.serverError().build();
+            return new ModelAndView(ViewName.EXCEPTION_VIEW)
+                    .addAttribute(ModelKey.STATUS_CODE, 500)
+                    .addAttribute(ModelKey.ERROR_MESSAGE, "Internal server error");
         }
     }
 
-    private String readFileContent(FileReader.FileResource file) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            return reader.lines().collect(Collectors.joining("\n"));
-        }
-    }
 }
