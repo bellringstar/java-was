@@ -8,4 +8,5 @@ public interface SessionManager {
     void removeSession(String sessionId);
     void invalidateExpiredSessions();
     void clearAllSessions();
+    void invalidateSession(String sessionId);
 }
