@@ -2,6 +2,7 @@ package codesquad.webserver.dispatcher.handler.adater;
 
 import codesquad.webserver.annotation.Component;
 import codesquad.webserver.dispatcher.view.ModelAndView;
+import codesquad.webserver.dispatcher.view.ModelKey;
 import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
@@ -25,6 +26,8 @@ public class SimpleHandlerAdapter implements HandlerAdapter {
         if (!supports(handler)) {
             logger.error("Handler not supported");
             ModelAndView mv = new ModelAndView(ViewName.EXCEPTION_VIEW);
+            mv.addAttribute(ModelKey.STATUS_CODE, 404);
+            return mv;
         }
 
         RequestHandler requestHandler = (RequestHandler) handler;
