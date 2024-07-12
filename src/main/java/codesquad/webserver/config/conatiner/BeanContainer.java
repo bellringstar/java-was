@@ -102,6 +102,14 @@ public class BeanContainer {
         return bean;
     }
 
+    public <T> T getBean(Class<T> type) {
+        String beanName = typeToNameMap.get(type);
+        if (beanName == null) {
+            throw new BeanNotFoundException("No bean found for type: " + type.getName());
+        }
+        return (T) getBean(beanName);
+    }
+
     private void registerType(Class<?> type, String name) {
         typeToNameMap.putIfAbsent(type, name);
     }
