@@ -2,6 +2,8 @@ package codesquad.webserver.dispatcher.requesthandler;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.annotation.Controller;
+import codesquad.webserver.annotation.RequestMapping;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.dispatcher.view.ModelKey;
@@ -12,7 +14,8 @@ import codesquad.webserver.model.User;
 import codesquad.webserver.parser.QueryStringParser;
 import java.util.Map;
 
-@Component
+@Controller
+@RequestMapping(path = "/create")
 public class UserCreateRequestHandler extends AbstractRequestHandler {
 
     private static final String HOME_PATH = "/";

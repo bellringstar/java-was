@@ -2,6 +2,8 @@ package codesquad.webserver.dispatcher.requesthandler;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.annotation.Controller;
+import codesquad.webserver.annotation.RequestMapping;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.dispatcher.view.ModelKey;
@@ -18,7 +20,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
+@Controller
+@RequestMapping(path = "/user/list")
 public class UserListHandler extends AbstractRequestHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(UserListHandler.class);

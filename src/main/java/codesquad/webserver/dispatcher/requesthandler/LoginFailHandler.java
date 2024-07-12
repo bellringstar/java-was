@@ -2,6 +2,8 @@ package codesquad.webserver.dispatcher.requesthandler;
 
 import codesquad.webserver.annotation.Autowired;
 import codesquad.webserver.annotation.Component;
+import codesquad.webserver.annotation.Controller;
+import codesquad.webserver.annotation.RequestMapping;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.dispatcher.view.ModelKey;
@@ -16,7 +18,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
+@Controller
+@RequestMapping(path = "/login/login_failed")
 public class LoginFailHandler extends AbstractRequestHandler {
 
     private static final String LOGIN_FAIL_REDIRECT_PATH = "/login/login_failed.html";
