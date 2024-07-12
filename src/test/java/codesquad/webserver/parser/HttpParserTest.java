@@ -55,7 +55,7 @@ public class HttpParserTest {
         assertEquals("HTTP/1.1", httpRequest.getRequestLine().httpVersion());
         assertEquals(List.of("localhost"), httpRequest.getHeaders().get("Host"));
         assertEquals(List.of("keep-alive"), httpRequest.getHeaders().get("Connection"));
-        assertEquals(Map.of("query", "java"), httpRequest.getHeaders());
+        assertEquals(Map.of("query", "java"), httpRequest.getParams());
         assertEquals("", httpRequest.getBody());
     }
 
