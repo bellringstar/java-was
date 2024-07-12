@@ -2,6 +2,7 @@ package codesquad.webserver.session;
 
 import codesquad.webserver.annotation.Component;
 import codesquad.webserver.model.User;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,14 +21,6 @@ public class InMemorySessionManager implements SessionManager {
         scheduleSessionCleanup();
     }
 
-    private static class Holder {
-        private static final SessionManager INSTANCE = new InMemorySessionManager();
-    }
-
-    public static SessionManager getInstance() {
-        return InMemorySessionManager.Holder.INSTANCE;
-    }
-
     @Override
     public Session createSession(User user) {
         String sessionId = generateSessionId();
@@ -39,6 +32,11 @@ public class InMemorySessionManager implements SessionManager {
     @Override
     public Session getSession(String sessionId) {
         return sessions.get(sessionId);
+    }
+
+    @Override
+    public Map<String, Session> getSessions() {
+        return sessions;
     }
 
     @Override

@@ -5,7 +5,6 @@ import codesquad.webserver.annotation.Component;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.dispatcher.view.ModelKey;
-import codesquad.webserver.dispatcher.view.TemplateView;
 import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
@@ -27,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class LoginRequestHandler extends AbstractRequestHandler {
 
     private static final String REDIRECT_PATH = "/";
-    private static final String LOGIN_FAIL_REDIRECT_PATH = "/user/login_failed.html";
+    private static final String LOGIN_FAIL_REDIRECT_PATH = "/login/login_failed.html";
     private static final String USERNAME_PARAM = "username";
     private static final String PASSWORD_PARAM = "password";
     private static final String COOKIE_NAME = "SID";
@@ -51,9 +50,9 @@ public class LoginRequestHandler extends AbstractRequestHandler {
             return new ModelAndView(ViewName.TEMPLATE_VIEW)
                     .addAttribute(ModelKey.CONTENT, readFileContent(file));
         } catch (IOException e) {
-            return new ModelAndView(ViewName.EXCEPTION_VIEW)
+            return new ModelAndView(ViewName.TEMPLATE_VIEW)
                     .addAttribute(ModelKey.STATUS_CODE, 404)
-                    .addAttribute(ModelKey.ERROR_MESSAGE, "Login page not found");
+                    .addAttribute(ModelKey.CONTENT, "Login page not found");
         }
     }
 

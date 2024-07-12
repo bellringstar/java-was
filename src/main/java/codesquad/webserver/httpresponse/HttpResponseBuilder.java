@@ -1,7 +1,7 @@
 package codesquad.webserver.httpresponse;
 
-import codesquad.webserver.session.cookie.HttpCookie;
 import codesquad.webserver.filereader.FileReader;
+import codesquad.webserver.session.cookie.HttpCookie;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +27,7 @@ public class HttpResponseBuilder {
         mimeTypes.put("gif", "image/gif");
         mimeTypes.put("svg", "image/svg+xml");
         mimeTypes.put("ico", "image/x-icon");
+        mimeTypes.put("txt", "text/plain");
         MIME_TYPES = Collections.unmodifiableMap(mimeTypes);
     }
 
