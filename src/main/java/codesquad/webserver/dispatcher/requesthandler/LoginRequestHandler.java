@@ -58,7 +58,7 @@ public class LoginRequestHandler extends AbstractRequestHandler {
 
     @Override
     protected ModelAndView handlePost(HttpRequest request) {
-        Map<String, String> params = QueryStringParser.parse(request.body());
+        Map<String, String> params = QueryStringParser.parse(request.getBody());
         String username = params.get(USERNAME_PARAM);
         String password = params.get(PASSWORD_PARAM);
 

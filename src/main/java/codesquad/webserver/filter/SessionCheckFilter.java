@@ -24,8 +24,8 @@ public class SessionCheckFilter implements Filter {
 
     @Override
     public void doFilter(HttpRequest request, HttpResponse response, FilterChain chain) {
-        if (isProtectedPath(request.requestLine().path()) && !hasValidSession(request)) {
-            logger.debug("세션이 존재하지 않는 사용자 요청: {}", request.requestLine().path());
+        if (isProtectedPath(request.getRequestLine().path()) && !hasValidSession(request)) {
+            logger.debug("세션이 존재하지 않는 사용자 요청: {}", request.getRequestLine().path());
             HttpResponse redirectResponse = HttpResponseBuilder.redirect("/login").build();
             chain.setResponse(redirectResponse);
         }

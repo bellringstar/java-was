@@ -27,12 +27,17 @@ public class UserCreateRequestHandler extends AbstractRequestHandler {
 
     @Override
     protected ModelAndView handlePost(HttpRequest request) {
-        Map<String, String> params = QueryStringParser.parse(request.body());
+        Map<String, String> params = QueryStringParser.parse(request.getBody());
         User user = User.of(params);
 
-        userDatabase.save(user);
         ModelAndView mv = new ModelAndView(ViewName.REDIRECT_VIEW);
-        mv.addAttribute(ModelKey.REDIRECT_URL, HOME_PATH);
+        try {
+            userDatabase.save(user);
+            mv.addAttribute(ModelKey.REDIRECT_URL, HOME_PATH);
+        } catch (IllegalArgumentException e) {
+            //TODO: 회원가입 실패 패이지로 전달. handler도 추가
+            mv.addAttribute(ModelKey.REDIRECT_URL, HOME_PATH);
+        }
         return mv;
     }
 }

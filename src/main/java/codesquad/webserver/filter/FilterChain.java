@@ -57,6 +57,12 @@ public class FilterChain {
         return filters.stream().map(OrderedFilter::getFilter).collect(Collectors.toUnmodifiableList());
     }
 
+    public List<Filter> getFiltersInOrder() {
+        return filters.stream()
+                .map(OrderedFilter::getFilter)
+                .collect(Collectors.toList());
+    }
+
     private static class OrderedFilter {
         private final Filter filter;
         private final int order;

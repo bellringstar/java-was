@@ -2,7 +2,6 @@ package codesquad.webserver.session;
 
 import codesquad.webserver.annotation.Component;
 import codesquad.webserver.model.User;
-import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;

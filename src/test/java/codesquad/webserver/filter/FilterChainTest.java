@@ -18,7 +18,17 @@ class FilterChainTest {
     @Test
     @DisplayName("필터를 추가하면 정렬된 순서로 저장되어야 한다")
     void addFilter_ShouldStoreFiltersInSortedOrder() {
-        // 이전 코드와 동일
+        //Given
+        FilterChain filterChain = new FilterChain();
+        TestFilter filter1 = new TestFilter(1);
+        TestFilter filter2 = new TestFilter(2);
+        TestFilter filter3 = new TestFilter(4);
+        //When
+        filterChain.addFilter(filter1, 2);
+        filterChain.addFilter(filter2, 1);
+        filterChain.addFilter(filter3, 4);
+        //Then
+        assertThat(filterChain.getFiltersInOrder()).containsExactly(filter2, filter1, filter3);
     }
 
     @Test

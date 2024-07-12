@@ -24,6 +24,6 @@ public class SimpleHandlerMapping implements HandlerMapping {
 
     @Override
     public Object getHandler(HttpRequest request) {
-        return handlers.get(request.requestLine().path());
+        return handlers.get(request.getRequestLine().path());
     }
 }

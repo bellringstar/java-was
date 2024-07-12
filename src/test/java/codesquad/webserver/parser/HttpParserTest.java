@@ -28,13 +28,13 @@ public class HttpParserTest {
         HttpRequest httpRequest = HttpParser.parse(in);
 
         // Then
-        assertEquals(HttpMethod.GET, httpRequest.requestLine().method());
-        assertEquals("/index.html", httpRequest.requestLine().path());
-        assertEquals("HTTP/1.1", httpRequest.requestLine().httpVersion());
-        assertEquals(List.of("localhost"), httpRequest.headers().get("Host"));
-        assertEquals(List.of("keep-alive"), httpRequest.headers().get("Connection"));
-        assertEquals(Map.of(), httpRequest.params());
-        assertEquals("", httpRequest.body());
+        assertEquals(HttpMethod.GET, httpRequest.getRequestLine().method());
+        assertEquals("/index.html", httpRequest.getRequestLine().path());
+        assertEquals("HTTP/1.1", httpRequest.getRequestLine().httpVersion());
+        assertEquals(List.of("localhost"), httpRequest.getHeaders().get("Host"));
+        assertEquals(List.of("keep-alive"), httpRequest.getHeaders().get("Connection"));
+        assertEquals(Map.of(), httpRequest.getParams());
+        assertEquals("", httpRequest.getBody());
     }
 
     @Test
@@ -50,13 +50,13 @@ public class HttpParserTest {
         HttpRequest httpRequest = HttpParser.parse(in);
 
         // Then
-        assertEquals(HttpMethod.GET, httpRequest.requestLine().method());
-        assertEquals("/search?query=java", httpRequest.requestLine().fullPath());
-        assertEquals("HTTP/1.1", httpRequest.requestLine().httpVersion());
-        assertEquals(List.of("localhost"), httpRequest.headers().get("Host"));
-        assertEquals(List.of("keep-alive"), httpRequest.headers().get("Connection"));
-        assertEquals(Map.of("query", "java"), httpRequest.params());
-        assertEquals("", httpRequest.body());
+        assertEquals(HttpMethod.GET, httpRequest.getRequestLine().method());
+        assertEquals("/search?query=java", httpRequest.getRequestLine().fullPath());
+        assertEquals("HTTP/1.1", httpRequest.getRequestLine().httpVersion());
+        assertEquals(List.of("localhost"), httpRequest.getHeaders().get("Host"));
+        assertEquals(List.of("keep-alive"), httpRequest.getHeaders().get("Connection"));
+        assertEquals(Map.of("query", "java"), httpRequest.getHeaders());
+        assertEquals("", httpRequest.getBody());
     }
 
     @Test

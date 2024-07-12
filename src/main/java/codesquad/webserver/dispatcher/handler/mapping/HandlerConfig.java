@@ -28,6 +28,7 @@ public class HandlerConfig {
         this.loginFailHandler = loginFailHandler;
     }
 
+
     public void initHandlers(SimpleHandlerMapping handlerMapping) {
         handlerMapping.addHandler("", homeRequestHandler);
         handlerMapping.addHandler("/", homeRequestHandler);

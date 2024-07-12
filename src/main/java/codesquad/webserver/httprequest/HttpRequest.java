@@ -2,17 +2,30 @@ package codesquad.webserver.httprequest;
 
 
 import codesquad.webserver.parser.RequestLine;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public record HttpRequest(RequestLine requestLine, Map<String, List<String>> headers, Map<String, String> params,
-                          String body) {
+public class HttpRequest {
+
+    private final RequestLine requestLine;
+    private final Map<String, List<String>> headers;
+    private final Map<String, String> params;
+    private final String body;
+
+    public HttpRequest(RequestLine requestLine, Map<String, List<String>> headers, Map<String, String> params,
+                       String body) {
+        this.requestLine = requestLine;
+        this.headers = headers;
+        this.params = params;
+        this.body = body;
+    }
 
     private static final String SESSION_KEY = "SID";
 
     public String getSessionIdFromRequest() {
-        List<String> cookie = this.headers().get("Cookie");
+        List<String> cookie = this.headers.get("Cookie");
         if (cookie == null || cookie.isEmpty()) {
             return "";
         }
@@ -29,6 +42,22 @@ public record HttpRequest(RequestLine requestLine, Map<String, List<String>> hea
         }
 
         return sessionId.get();
+    }
+
+    public RequestLine getRequestLine() {
+        return requestLine;
+    }
+
+    public Map<String, List<String>> getHeaders() {
+        return Collections.unmodifiableMap(headers);
+    }
+
+    public Map<String, String> getParams() {
+        return Collections.unmodifiableMap(params);
+    }
+
+    public String getBody() {
+        return body;
     }
 
     @Override
