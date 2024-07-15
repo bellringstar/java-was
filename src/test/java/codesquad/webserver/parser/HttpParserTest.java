@@ -28,9 +28,9 @@ public class HttpParserTest {
         HttpRequest httpRequest = HttpParser.parse(in);
 
         // Then
-        assertEquals(HttpMethod.GET, httpRequest.getRequestLine().method());
-        assertEquals("/index.html", httpRequest.getRequestLine().path());
-        assertEquals("HTTP/1.1", httpRequest.getRequestLine().httpVersion());
+        assertEquals(HttpMethod.GET, httpRequest.getRequestLine().getMethod());
+        assertEquals("/index.html", httpRequest.getRequestLine().getPath());
+        assertEquals("HTTP/1.1", httpRequest.getRequestLine().getHttpVersion());
         assertEquals(List.of("localhost"), httpRequest.getHeaders().get("Host"));
         assertEquals(List.of("keep-alive"), httpRequest.getHeaders().get("Connection"));
         assertEquals(Map.of(), httpRequest.getParams());
@@ -50,9 +50,9 @@ public class HttpParserTest {
         HttpRequest httpRequest = HttpParser.parse(in);
 
         // Then
-        assertEquals(HttpMethod.GET, httpRequest.getRequestLine().method());
-        assertEquals("/search?query=java", httpRequest.getRequestLine().fullPath());
-        assertEquals("HTTP/1.1", httpRequest.getRequestLine().httpVersion());
+        assertEquals(HttpMethod.GET, httpRequest.getRequestLine().getMethod());
+        assertEquals("/search?query=java", httpRequest.getRequestLine().getFullPath());
+        assertEquals("HTTP/1.1", httpRequest.getRequestLine().getHttpVersion());
         assertEquals(List.of("localhost"), httpRequest.getHeaders().get("Host"));
         assertEquals(List.of("keep-alive"), httpRequest.getHeaders().get("Connection"));
         assertEquals(Map.of("query", "java"), httpRequest.getParams());
