@@ -2,6 +2,7 @@ package codesquad.webserver.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import codesquad.webserver.db.user.User;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;

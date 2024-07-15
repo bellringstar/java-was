@@ -8,7 +8,7 @@ import codesquad.webserver.dispatcher.view.ModelKey;
 import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
-import codesquad.webserver.model.User;
+import codesquad.webserver.db.user.User;
 import codesquad.webserver.session.Session;
 import codesquad.webserver.session.SessionManager;
 import java.io.IOException;

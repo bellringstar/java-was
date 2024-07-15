@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import codesquad.webserver.model.User;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +28,7 @@ class InMemoryUserDatabaseTest {
         User newUser = new User("4", "password4", "4번 유저");
         userDatabase.save(newUser);
 
-        User foundUser = userDatabase.findByUserId("4");
+        User foundUser = userDatabase.findByUserId("4").get();
         assertNotNull(foundUser);
         assertEquals("4", foundUser.getUserId());
         assertEquals("password4", foundUser.getPassword());
@@ -73,12 +72,5 @@ class InMemoryUserDatabaseTest {
         userDatabase.clear();
         List<User> allUsers = userDatabase.findAllUsers();
         assertTrue(allUsers.isEmpty());
-    }
-
-    @Test
-    @DisplayName("가입한 사용자 목록을 출력한다")
-    void testPrint() {
-        Logger logger = LoggerFactory.getLogger(InMemoryUserDatabase.class);
-        userDatabase.print();
     }
 }

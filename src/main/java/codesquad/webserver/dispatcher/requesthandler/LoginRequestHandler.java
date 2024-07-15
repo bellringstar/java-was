@@ -1,7 +1,6 @@
 package codesquad.webserver.dispatcher.requesthandler;
 
 import codesquad.webserver.annotation.Autowired;
-import codesquad.webserver.annotation.Component;
 import codesquad.webserver.annotation.Controller;
 import codesquad.webserver.annotation.RequestMapping;
 import codesquad.webserver.db.user.UserDatabase;
@@ -10,7 +9,7 @@ import codesquad.webserver.dispatcher.view.ModelKey;
 import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
-import codesquad.webserver.model.User;
+import codesquad.webserver.db.user.User;
 import codesquad.webserver.parser.QueryStringParser;
 import codesquad.webserver.session.Session;
 import codesquad.webserver.session.SessionManager;
@@ -66,7 +65,8 @@ public class LoginRequestHandler extends AbstractRequestHandler {
         String password = params.get(PASSWORD_PARAM);
 
         try {
-            User user = userDatabase.findByUserId(username);
+            User user = userDatabase.findByUserId(username)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
             if (isValidPassword(user, password)) {
                 logger.info("로그인 성공: {}", username);
                 return createSuccessResponse(user);

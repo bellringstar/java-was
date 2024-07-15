@@ -8,7 +8,7 @@ import codesquad.webserver.dispatcher.view.ModelKey;
 import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
-import codesquad.webserver.model.User;
+import codesquad.webserver.db.user.User;
 import codesquad.webserver.parser.RequestLine;
 import codesquad.webserver.parser.enums.HttpMethod;
 import codesquad.webserver.session.InMemorySession;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -127,18 +128,13 @@ class UserListHandlerTest {
         }
 
         @Override
-        public User findByUserId(String userId) {
+        public Optional<User> findByUserId(String userId) {
             return null;
         }
 
         @Override
         public boolean existsByUserId(String userId) {
             return false;
-        }
-
-        @Override
-        public void print() {
-
         }
 
         @Override

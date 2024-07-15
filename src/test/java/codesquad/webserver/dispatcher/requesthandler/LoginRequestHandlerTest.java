@@ -2,13 +2,13 @@ package codesquad.webserver.dispatcher.requesthandler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import codesquad.webserver.db.user.User;
 import codesquad.webserver.db.user.UserDatabase;
 import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.dispatcher.view.ModelKey;
 import codesquad.webserver.dispatcher.view.ViewName;
 import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.httprequest.HttpRequest;
-import codesquad.webserver.model.User;
 import codesquad.webserver.parser.RequestLine;
 import codesquad.webserver.parser.enums.HttpMethod;
 import codesquad.webserver.session.Session;
@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -151,9 +152,9 @@ class LoginRequestHandlerTest {
         }
 
         @Override
-        public User findByUserId(String userId) {
+        public Optional<User> findByUserId(String userId) {
             if ("testUser".equals(userId)) {
-                return new User("testUser", "password", "Test User");
+                return Optional.of(new User("testUser", "password", "Test User"));
             } else {
                 throw new IllegalArgumentException("User not found");
             }
@@ -167,11 +168,6 @@ class LoginRequestHandlerTest {
         @Override
         public boolean existsByUserId(String userId) {
             return false;
-        }
-
-        @Override
-        public void print() {
-
         }
 
         @Override

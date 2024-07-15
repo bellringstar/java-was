@@ -1,6 +1,6 @@
 package codesquad.webserver.session;
 
-import codesquad.webserver.model.User;
+import codesquad.webserver.db.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

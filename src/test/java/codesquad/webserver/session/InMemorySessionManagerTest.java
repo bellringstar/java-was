@@ -2,7 +2,7 @@ package codesquad.webserver.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import codesquad.webserver.model.User;
+import codesquad.webserver.db.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

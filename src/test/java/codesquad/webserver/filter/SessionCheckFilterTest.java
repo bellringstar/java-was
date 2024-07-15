@@ -3,7 +3,7 @@ package codesquad.webserver.filter;
 import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httpresponse.HttpResponse;
 import codesquad.webserver.httpresponse.HttpResponseBuilder;
-import codesquad.webserver.model.User;
+import codesquad.webserver.db.user.User;
 import codesquad.webserver.parser.RequestLine;
 import codesquad.webserver.parser.enums.HttpMethod;
 import codesquad.webserver.session.Session;
