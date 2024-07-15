@@ -3,16 +3,24 @@ package codesquad.webserver.httprequest;
 
 import codesquad.webserver.parser.RequestLine;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class HttpRequest {
 
-    private final RequestLine requestLine;
-    private final Map<String, List<String>> headers;
-    private final Map<String, String> params;
-    private final String body;
+    private RequestLine requestLine;
+    private Map<String, List<String>> headers;
+    private Map<String, String> params;
+    private String body;
+    private Map<String, String> multipartFields = new HashMap<>();
+    ;
+    private Map<String, FileItem> multipartFiles = new HashMap<>();
+    ;
+
+    public HttpRequest() {
+    }
 
     public HttpRequest(RequestLine requestLine, Map<String, List<String>> headers, Map<String, String> params,
                        String body) {
@@ -20,6 +28,17 @@ public class HttpRequest {
         this.headers = headers;
         this.params = params;
         this.body = body;
+    }
+
+    public HttpRequest(RequestLine requestLine, Map<String, List<String>> headers, Map<String, String> params,
+                       String body,
+                       Map<String, String> multipartFields, Map<String, FileItem> multipartFiles) {
+        this.requestLine = requestLine;
+        this.headers = headers;
+        this.params = params;
+        this.body = body;
+        this.multipartFields = multipartFields;
+        this.multipartFiles = multipartFiles;
     }
 
     private static final String SESSION_KEY = "SID";
@@ -60,6 +79,45 @@ public class HttpRequest {
         return body;
     }
 
+    public HttpRequest setRequestLine(RequestLine requestLine) {
+        this.requestLine = requestLine;
+        return this;
+    }
+
+    public HttpRequest setHeaders(Map<String, List<String>> headers) {
+        this.headers = headers;
+        return this;
+    }
+
+    public HttpRequest setParams(Map<String, String> params) {
+        this.params = params;
+        return this;
+    }
+
+    public HttpRequest setBody(String body) {
+        this.body = body;
+        return this;
+    }
+
+    public HttpRequest setMultipartFields(Map<String, String> multipartFields) {
+        this.multipartFields = multipartFields;
+        return this;
+    }
+
+    public HttpRequest setMultipartFiles(
+            Map<String, FileItem> multipartFiles) {
+        this.multipartFiles = multipartFiles;
+        return this;
+    }
+
+    public Map<String, String> getMultipartFields() {
+        return multipartFields;
+    }
+
+    public Map<String, FileItem> getMultipartFiles() {
+        return multipartFiles;
+    }
+
     @Override
     public String toString() {
         System.out.println("리퀘스트 헤더" + headers);
@@ -77,5 +135,22 @@ public class HttpRequest {
         }
 
         return httpRequestString.toString();
+    }
+
+    public static class FileItem {
+        public final String filename;
+        public final byte[] content;
+
+        public FileItem(String filename, byte[] content) {
+            this.filename = filename;
+            this.content = content;
+        }
+
+        @Override
+        public String toString() {
+            return "FileItem{" +
+                    "filename='" + filename +
+                    '}';
+        }
     }
 }
