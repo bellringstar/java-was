@@ -146,6 +146,14 @@ public class HttpRequest {
             this.content = content;
         }
 
+        public String getFilename() {
+            return filename;
+        }
+
+        public byte[] getContent() {
+            return content;
+        }
+
         @Override
         public String toString() {
             return "FileItem{" +
