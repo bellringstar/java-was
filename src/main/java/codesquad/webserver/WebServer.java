@@ -66,8 +66,8 @@ public class WebServer {
 
             if (response.getStatusCode() != 200) {
                 
-            } else if (staticResourceResolver.isStaticResource(request.getRequestLine().path())) {
-                logger.debug("정적 경로 처리 중 : {}", request.getRequestLine().path());
+            } else if (staticResourceResolver.isStaticResource(request.getRequestLine().getPath())) {
+                logger.debug("정적 경로 처리 중 : {}", request.getRequestLine().getPath());
                 response = staticResourceHandler.handleRequest(request);
             } else {
                 response = dispatcherServlet.service(request);

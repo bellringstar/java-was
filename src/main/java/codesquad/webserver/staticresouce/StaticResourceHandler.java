@@ -24,7 +24,7 @@ public class StaticResourceHandler {
     }
 
     public HttpResponse handleRequest(HttpRequest request) {
-        String path = request.getRequestLine().path();
+        String path = request.getRequestLine().getPath();
         try {
             FileReader.FileResource resource = fileReader.read(path);
             return HttpResponseBuilder.buildFromFile(resource);
