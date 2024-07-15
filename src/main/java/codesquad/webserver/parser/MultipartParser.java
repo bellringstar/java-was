@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MultipartParser {
-    private static final int BUFFER_SIZE = 8192;
 
     public static void parse(BufferedReader reader, HttpRequest request) throws IOException {
         String boundary = extractBoundary(request.getHeaders().get("Content-Type"));
