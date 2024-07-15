@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./reset.css" rel="stylesheet" />
+    <link href="./global.css" rel="stylesheet" />
+    <link href="./main.css" rel="stylesheet" />
+    <style>
+        .write-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .write-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .write-form textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .image-upload {
+            margin-bottom: 10px;
+        }
+        .image-upload label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="/"><img src="./img/signiture.svg" alt="로고" /></a>
+        <ul class="header__menu">
+            <li class="header__menu__item">
+                <a class="btn btn_ghost btn_size_s" href="/">홈으로</a>
+            </li>
+        </ul>
+    </header>
+    <div class="write-container">
+        <h1>새 글 작성</h1>
+        <form class="write-form" action="/post" method="post" enctype="multipart/form-data">
+            <div class="image-upload">
+                <label for="image-upload">이미지 업로드:</label>
+                <input type="file" id="image-upload" name="image" accept="image/*" />
+            </div>
+            <textarea name="content" placeholder="내용을 입력하세요..." required></textarea>
+            <button class="btn btn_contained btn_size_m" type="submit">글 올리기</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
