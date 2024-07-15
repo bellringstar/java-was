@@ -102,7 +102,7 @@ class LoginRequestHandlerTest {
 
         // Then
         assertThat(result.getViewName()).isEqualTo(ViewName.REDIRECT_VIEW);
-        assertThat(result.getModel()).containsEntry(ModelKey.REDIRECT_URL, "/login/login_failed.html");
+        assertThat(result.getModel()).containsEntry(ModelKey.REDIRECT_URL, "/login/login_failed");
     }
 
     @Test
@@ -117,7 +117,7 @@ class LoginRequestHandlerTest {
 
         // Then
         assertThat(result.getViewName()).isEqualTo(ViewName.REDIRECT_VIEW);
-        assertThat(result.getModel()).containsEntry(ModelKey.REDIRECT_URL, "/login/login_failed.html");
+        assertThat(result.getModel()).containsEntry(ModelKey.REDIRECT_URL, "/login/login_failed");
     }
 
     private HttpRequest createTestHttpRequest(String path, HttpMethod method, String body) {

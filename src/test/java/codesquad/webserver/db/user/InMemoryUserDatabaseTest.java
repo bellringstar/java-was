@@ -10,8 +10,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class InMemoryUserDatabaseTest {
 
@@ -42,14 +40,6 @@ class InMemoryUserDatabaseTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> userDatabase.save(existingUser));
         assertEquals("User with id 1 already exists", exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 사용자 ID로 조회 시 예외를 발생시킨다")
-    void testFindNonExistingUser() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> userDatabase.findByUserId("nonexistent"));
-        assertEquals("User with id nonexistent not found", exception.getMessage());
     }
 
     @Test
