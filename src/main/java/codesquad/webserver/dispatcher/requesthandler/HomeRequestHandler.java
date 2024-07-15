@@ -1,7 +1,6 @@
 package codesquad.webserver.dispatcher.requesthandler;
 
 import codesquad.webserver.annotation.Autowired;
-import codesquad.webserver.annotation.Component;
 import codesquad.webserver.annotation.Controller;
 import codesquad.webserver.annotation.RequestMapping;
 import codesquad.webserver.dispatcher.view.ModelAndView;
