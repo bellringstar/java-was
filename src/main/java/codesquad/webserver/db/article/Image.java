@@ -6,16 +6,15 @@ public class Image {
     private String filename;
     private Long articleId;
 
-    public Image(Long id, String path, Long articleId) {
+    public Image(Long id, String path, String filename, Long articleId) {
         this.id = id;
         this.path = path;
+        this.filename = filename;
         this.articleId = articleId;
     }
 
     public Image(String path, String filename, Long articleId) {
-        this.path = path;
-        this.filename = filename;
-        this.articleId = articleId;
+        this(null, path, filename, articleId);
     }
 
     public Long getId() {

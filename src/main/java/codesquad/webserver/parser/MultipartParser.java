@@ -5,16 +5,17 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultipartParser {
+public abstract class MultipartParser {
 
     public static void parse(BufferedReader reader, HttpRequest request) throws IOException {
         String boundary = extractBoundary(request.getHeaders().get("Content-Type"));
-        Map<String, String> multipartFields = new HashMap<>();
-        Map<String, HttpRequest.FileItem> multipartFiles = new HashMap<>();
+        Map<String, List<String>> multipartFields = new HashMap<>();
+        Map<String, List<HttpRequest.FileItem>> multipartFiles = new HashMap<>();
 
         String line;
         boolean isReadingPart = false;
@@ -53,11 +54,15 @@ public class MultipartParser {
     }
 
     private static void savePart(String name, String filename, ByteArrayOutputStream content,
-                                 Map<String, String> fields, Map<String, HttpRequest.FileItem> files) {
+                                 Map<String, List<String>> fields, Map<String, List<HttpRequest.FileItem>> files) {
         if (filename != null) {
-            files.put(name, new HttpRequest.FileItem(filename, content.toByteArray()));
+            files.computeIfAbsent(name, k -> new ArrayList<>()).add(
+                    new HttpRequest.FileItem(filename, content.toByteArray())
+            );
         } else {
-            fields.put(name, new String(content.toByteArray(), StandardCharsets.UTF_8).trim());
+            fields.computeIfAbsent(name, k -> new ArrayList<>()).add(
+                    new String(content.toByteArray(), StandardCharsets.UTF_8).trim()
+            );
         }
     }
 

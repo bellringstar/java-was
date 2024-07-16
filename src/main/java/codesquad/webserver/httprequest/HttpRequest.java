@@ -14,9 +14,9 @@ public class HttpRequest {
     private Map<String, List<String>> headers;
     private Map<String, String> params;
     private String body;
-    private Map<String, String> multipartFields = new HashMap<>();
+    private Map<String, List<String>> multipartFields = new HashMap<>();
     ;
-    private Map<String, FileItem> multipartFiles = new HashMap<>();
+    private Map<String, List<FileItem>> multipartFiles = new HashMap<>();
     ;
 
     public HttpRequest() {
@@ -32,7 +32,7 @@ public class HttpRequest {
 
     public HttpRequest(RequestLine requestLine, Map<String, List<String>> headers, Map<String, String> params,
                        String body,
-                       Map<String, String> multipartFields, Map<String, FileItem> multipartFiles) {
+                       Map<String, List<String>> multipartFields, Map<String, List<FileItem>> multipartFiles) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.params = params;
@@ -99,23 +99,21 @@ public class HttpRequest {
         return this;
     }
 
-    public HttpRequest setMultipartFields(Map<String, String> multipartFields) {
-        this.multipartFields = multipartFields;
-        return this;
-    }
-
-    public HttpRequest setMultipartFiles(
-            Map<String, FileItem> multipartFiles) {
-        this.multipartFiles = multipartFiles;
-        return this;
-    }
-
-    public Map<String, String> getMultipartFields() {
+    public Map<String, List<String>> getMultipartFields() {
         return multipartFields;
     }
 
-    public Map<String, FileItem> getMultipartFiles() {
+    public void setMultipartFields(Map<String, List<String>> multipartFields) {
+        this.multipartFields = multipartFields;
+    }
+
+    public Map<String, List<FileItem>> getMultipartFiles() {
         return multipartFiles;
+    }
+
+    public void setMultipartFiles(
+            Map<String, List<FileItem>> multipartFiles) {
+        this.multipartFiles = multipartFiles;
     }
 
     @Override

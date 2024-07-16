@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -71,19 +73,23 @@ public class WriteRequestHandler extends AbstractRequestHandler {
 
     @Override
     protected ModelAndView handlePost(HttpRequest request) {
-        Map<String, String> multipartFields = request.getMultipartFields();
-        Map<String, FileItem> multipartFiles = request.getMultipartFiles();
 
-        String content = multipartFields.get("content");
-        FileItem imageFile = multipartFiles.get("image");
+        Map<String, List<String>> multipartFields = request.getMultipartFields();
+        Map<String, List<FileItem>> multipartFiles = request.getMultipartFiles();
+
+        String title = multipartFields.get("title").get(0);
+        String content = multipartFields.get("content").get(0);
+        List<FileItem> imageFiles = multipartFiles.get("images");
 
         try {
-            Article article = new Article(content);
+            Article article = new Article(title, content);
 
-            if (imageFile != null) {
-                String imagePath = saveImageToLocal(imageFile);
-                Image image = new Image(null, imagePath, null);
-                article.addImage(image);
+            if (imageFiles != null && !imageFiles.isEmpty()) {
+                for (FileItem imageFile : imageFiles) {
+                    String imagePath = saveImageToLocal(imageFile);
+                    Image image = new Image(imagePath, imageFile.getFilename(), null);
+                    article.addImage(image);
+                }
             }
 
             articleDatabase.save(article);
@@ -92,6 +98,11 @@ public class WriteRequestHandler extends AbstractRequestHandler {
             mv.addAttribute(ModelKey.REDIRECT_URL, "/");
             return mv;
 
+        } catch (SQLException e) {
+            logger.error("Error sql exception: {}", e.getMessage());
+            return new ModelAndView(ViewName.EXCEPTION_VIEW)
+                    .addAttribute(ModelKey.STATUS_CODE, 404)
+                    .addAttribute(ModelKey.ERROR_MESSAGE, "Error sql exception");
         } catch (IOException e) {
             logger.error("Error saving image: {}", e.getMessage());
             return new ModelAndView(ViewName.EXCEPTION_VIEW)
