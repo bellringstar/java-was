@@ -84,7 +84,8 @@
     </header>
     <div class="write-container">
         <h1>새 글 작성</h1>
-        <form class="write-form" action="/write" method="post" enctype="multipart/form-data">
+        <form class="write-form" action="/write" method="post" enctype="multipart/form-data"
+              onsubmit="return validateForm()">
             <input type="text" name="title" placeholder="제목을 입력하세요..." required/>
             <textarea name="content" placeholder="내용을 입력하세요..." required></textarea>
             <div class="image-upload">
@@ -158,6 +159,15 @@
             }
             reader.readAsDataURL(file);
         });
+    }
+
+    function validateForm() {
+        const files = fileInput.files;
+        if (files.length === 0) {
+            alert("최소 1개의 이미지를 첨부해주세요.");
+            return false;
+        }
+        return true;
     }
 </script>
 </body>
