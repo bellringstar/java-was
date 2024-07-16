@@ -6,6 +6,7 @@ import codesquad.webserver.annotation.RequestMapping;
 import codesquad.webserver.db.article.Article;
 import codesquad.webserver.db.article.ArticleDatabase;
 import codesquad.webserver.db.article.Image;
+import codesquad.webserver.db.user.User;
 import codesquad.webserver.dispatcher.view.ModelAndView;
 import codesquad.webserver.dispatcher.view.ModelKey;
 import codesquad.webserver.dispatcher.view.ViewName;
@@ -13,6 +14,8 @@ import codesquad.webserver.filereader.FileReader;
 import codesquad.webserver.filereader.FileReader.FileResource;
 import codesquad.webserver.httprequest.HttpRequest;
 import codesquad.webserver.httprequest.HttpRequest.FileItem;
+import codesquad.webserver.session.Session;
+import codesquad.webserver.session.SessionManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,11 +37,13 @@ public class WriteRequestHandler extends AbstractRequestHandler {
     private final String uploadDir;
 
     private final ArticleDatabase articleDatabase;
+    private final SessionManager sessionManager;
 
     @Autowired
-    public WriteRequestHandler(FileReader fileReader, ArticleDatabase articleDatabase) {
+    public WriteRequestHandler(FileReader fileReader, ArticleDatabase articleDatabase, SessionManager sessionManager) {
         super(fileReader);
         this.articleDatabase = articleDatabase;
+        this.sessionManager = sessionManager;
         this.uploadDir = getProjectUploadPath();
         logger.info("Upload directory set to: {}", this.uploadDir);
     }
@@ -51,6 +56,14 @@ public class WriteRequestHandler extends AbstractRequestHandler {
     @Override
     protected ModelAndView handleGet(HttpRequest request) {
         try {
+            String sessionId = request.getSessionIdFromRequest();
+            Session session = sessionManager.getSession(sessionId);
+
+            if (session == null || session.getUser() == null) {
+                return new ModelAndView(ViewName.REDIRECT_VIEW)
+                        .addAttribute(ModelKey.REDIRECT_URL, "/login");
+            }
+
             FileResource fileResource = fileReader.read(PATH);
             String content = fileResource.readFileContent();
             ModelAndView mv = new ModelAndView(ViewName.TEMPLATE_VIEW);
@@ -73,6 +86,15 @@ public class WriteRequestHandler extends AbstractRequestHandler {
 
     @Override
     protected ModelAndView handlePost(HttpRequest request) {
+        String sessionId = request.getSessionIdFromRequest();
+        Session session = sessionManager.getSession(sessionId);
+
+        if (session == null || session.getUser() == null) {
+            return new ModelAndView(ViewName.REDIRECT_VIEW)
+                    .addAttribute(ModelKey.REDIRECT_URL, "/login");
+        }
+
+        User currentUser = session.getUser();
 
         Map<String, List<String>> multipartFields = request.getMultipartFields();
         Map<String, List<FileItem>> multipartFiles = request.getMultipartFiles();
@@ -82,7 +104,7 @@ public class WriteRequestHandler extends AbstractRequestHandler {
         List<FileItem> imageFiles = multipartFiles.get("images");
 
         try {
-            Article article = new Article(title, content);
+            Article article = new Article(title, content, currentUser);
 
             if (imageFiles != null && !imageFiles.isEmpty()) {
                 for (FileItem imageFile : imageFiles) {
