@@ -12,5 +12,9 @@ public interface ArticleDatabase {
 
     List<Article> findAllArticle() throws SQLException;
 
+    List<Article> findAllArticle(int page, int pageSize) throws SQLException;
+
+    int getTotalArticleCount() throws SQLException;
+
     void clear() throws SQLException;
 }
