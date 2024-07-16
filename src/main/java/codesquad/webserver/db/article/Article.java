@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Article {
     private Long id;
+    private String title;
     private String content;
     private List<Image> images = new ArrayList<>();
 
@@ -13,12 +14,17 @@ public class Article {
         this.content = content;
     }
 
-    public Article(String content) {
+    public Article(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getContent() {
