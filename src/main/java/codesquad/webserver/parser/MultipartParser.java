@@ -25,7 +25,6 @@ public class MultipartParser {
         byte[] buffer = new byte[BUFFER_SIZE];
         int bytesRead;
         long totalBytesRead = 0;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         Map<String, List<String>> multipartFields = new HashMap<>();
         Map<String, List<HttpRequest.FileItem>> multipartFiles = new HashMap<>();
