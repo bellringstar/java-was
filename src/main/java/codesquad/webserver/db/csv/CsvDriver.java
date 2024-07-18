@@ -1,6 +1,5 @@
-package codesquad.webserver.db.csv.driver;
+package codesquad.webserver.db.csv;
 
-import codesquad.webserver.db.csv.connection.CsvConnection;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -55,6 +54,6 @@ public class CsvDriver implements Driver {
 
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        throw new SQLFeatureNotSupportedException();
+        return null;
     }
 }
