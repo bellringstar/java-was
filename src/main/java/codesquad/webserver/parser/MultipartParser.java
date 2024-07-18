@@ -12,12 +12,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MultipartParser {
+public abstract class MultipartParser {
     private static final Logger logger = LoggerFactory.getLogger(MultipartParser.class);
     private static final String UTF_8 = "UTF-8";
     private static final String ISO_8859_1 = "ISO-8859-1";
-    private static final int BUFFER_SIZE = 8192; // 8KB buffer for more frequent processing
-    private static final int MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB max file size
+    private static final int BUFFER_SIZE = 8192;
+    private static final int MAX_FILE_SIZE = 100 * 1024 * 1024;
 
     public static void parse(BufferedInputStream in, HttpRequest request) throws IOException {
         String boundary = "--" + extractBoundary(request.getHeaders().get("Content-Type"));
