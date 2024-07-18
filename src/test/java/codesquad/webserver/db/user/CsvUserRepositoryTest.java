@@ -19,6 +19,7 @@ class CsvUserRepositoryTest {
     @BeforeEach
     void setUp() {
         userRepository = new CsvUserRepository();
+        userRepository.clear();
     }
 
     @AfterEach
