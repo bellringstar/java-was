@@ -39,12 +39,12 @@ public class CsvUserRepository implements UserDatabase {
         }
     }
 
-    public static int getColumnIndex(String columnName) {
+    public int getColumnIndex(String columnName) {
         Integer index = COLUMN_INDICES.get(columnName);
         if (index == null) {
             throw new IllegalArgumentException("Column not found: " + columnName);
         }
-        return index;
+        return index + 1;
     }
 
     public CsvUserRepository() {
@@ -60,7 +60,7 @@ public class CsvUserRepository implements UserDatabase {
 
     public void save(User user) throws SQLException {
         String sql = "INSERT INTO users (id, password, name)VALUES (?, ?, ?)";
-        if (findByUserId(user.getUserId()).isPresent()) {
+        if (existsByUserId(user.getUserId())) {
             throw new SQLException("Already exist user");
         }
         try (Connection conn = DriverManager.getConnection(jdbcUrl);
@@ -84,9 +84,9 @@ public class CsvUserRepository implements UserDatabase {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(new User(
-                            rs.getString("id"),
-                            rs.getString("password"),
-                            rs.getString("name")
+                            rs.getString(getColumnIndex("id")),
+                            rs.getString(getColumnIndex("password")),
+                            rs.getString(getColumnIndex("name"))
                     ));
                 }
             }
@@ -107,9 +107,9 @@ public class CsvUserRepository implements UserDatabase {
              ResultSet rs = pstmt.executeQuery(sql)) {
             while (rs.next()) {
                 User user = new User(
-                        rs.getString("id"),
-                        rs.getString("password"),
-                        rs.getString("name")
+                        rs.getString(getColumnIndex("id")),
+                        rs.getString(getColumnIndex("password")),
+                        rs.getString(getColumnIndex("name"))
                 );
                 users.add(user);
             }
@@ -129,7 +129,7 @@ public class CsvUserRepository implements UserDatabase {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                String id = rs.getString("id");
+                String id = rs.getString(getColumnIndex("id"));
                 if (userId.equals(id)) {
                     return true;
                 }

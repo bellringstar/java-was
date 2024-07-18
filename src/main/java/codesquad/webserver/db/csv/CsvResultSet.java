@@ -168,8 +168,7 @@ public class CsvResultSet implements ResultSet {
 
     @Override
     public String getString(String columnLabel) throws SQLException {
-        int columnIndex = CsvUserRepository.getColumnIndex(columnLabel);
-        return getString(columnIndex + 1);
+        return getString(Integer.parseInt(columnLabel) + 1);
     }
 
     @Override
@@ -194,8 +193,7 @@ public class CsvResultSet implements ResultSet {
 
     @Override
     public long getLong(String columnLabel) throws SQLException {
-        int columnIndex = CsvUserRepository.getColumnIndex(columnLabel);
-        return getLong(columnIndex + 1);
+        return getLong(Integer.parseInt(columnLabel) + 1);
     }
 
     @Override

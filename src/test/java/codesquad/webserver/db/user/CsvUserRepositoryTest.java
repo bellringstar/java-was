@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class CsvUserRepositoryTest {
@@ -25,7 +27,8 @@ class CsvUserRepositoryTest {
     }
 
     @Test
-    void saveAndFindByUserId() {
+    @DisplayName("사용자를 저장하고 해당 사용자를 찾는다.")
+    void saveAndFindByUserId() throws SQLException {
         User user = new User("testUser", "password", "Test User");
         userRepository.save(user);
 
@@ -43,7 +46,8 @@ class CsvUserRepositoryTest {
     }
 
     @Test
-    void findAllUsers() {
+    @DisplayName("모든 사용자를 찾아 리스트로 반환한다.")
+    void findAllUsers() throws SQLException {
         User user1 = new User("user1", "password1", "User One");
         User user2 = new User("user2", "password2", "User Two");
         userRepository.save(user1);
@@ -56,7 +60,8 @@ class CsvUserRepositoryTest {
     }
 
     @Test
-    void existsByUserId() {
+    @DisplayName("id를 통해 사용자가 존재하는지 확인한다.")
+    void existsByUserId() throws SQLException {
         User user = new User("existingUser", "password", "Existing User");
         userRepository.save(user);
 
@@ -65,7 +70,8 @@ class CsvUserRepositoryTest {
     }
 
     @Test
-    void clear() {
+    @DisplayName("모든 사용자를 지운다.")
+    void clear() throws SQLException {
         User user = new User("userToClear", "password", "User To Clear");
         userRepository.save(user);
         assertFalse(userRepository.findAllUsers().isEmpty());
