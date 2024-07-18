@@ -26,7 +26,7 @@ public class HomeRequestHandler extends AbstractRequestHandler {
 
     private static final String FILE_PATH = "/index.html";
     private static final Logger logger = LoggerFactory.getLogger(HomeRequestHandler.class);
-    private static final int ARTICLE_PER_PAGE = 1;
+    private static final int ARTICLE_PER_PAGE = 2;
 
     private final SessionManager sessionManager;
     private final ArticleDatabase articleDatabase;
