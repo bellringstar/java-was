@@ -43,7 +43,7 @@ public class CsvPrepareStatement extends CsvStatement implements PreparedStateme
     private String resolveSql() {
         String result = sql;
         for (String param : parameters) {
-            result = result.replaceFirst("\\?", param != null ? "'" + param.replace("'", "''") + "'" : "NULL");
+            result = result.replaceFirst("\\?", param != null ? "" + param.replace("'", "''") + "" : "NULL");
         }
         return result;
     }

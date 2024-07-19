@@ -77,8 +77,7 @@ public class CsvResultSet implements ResultSet {
             throw new SQLException("Invalid column index");
         }
         String string = data.get(currentRow)[columnIndex - 1];
-        String substring = string.substring(1, string.length() - 1);
-        return substring;
+        return string;
     }
 
     private void checkValidRow() throws SQLException {
@@ -111,7 +110,6 @@ public class CsvResultSet implements ResultSet {
     @Override
     public long getLong(int columnIndex) throws SQLException {
         String value = getString(columnIndex);
-        value = value.substring(1, value.length() - 1);
         try {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {

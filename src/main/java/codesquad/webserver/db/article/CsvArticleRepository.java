@@ -119,14 +119,11 @@ public class CsvArticleRepository implements ArticleDatabase {
 
     @Override
     public List<Article> findAllArticle(int page, int pageSize) {
-        String sql = "SELECT * FROM articles ORDER BY id DESC LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM articles";
         List<Article> articles = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(jdbcUrl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, pageSize);
-            pstmt.setInt(2, (page - 1) * pageSize);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
