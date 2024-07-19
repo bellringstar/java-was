@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class CsvArticleRepository implements ArticleDatabase {
     private static final Logger logger = LoggerFactory.getLogger(CsvArticleRepository.class);
     private static final String CSV_FILE_NAME = "articles.csv";
-    private static final String CSV_HEADER = "id,title,content,user_id,image_path,image_filename";
+    private static final String CSV_HEADER = "id,title,content,user_id,user_name,image_path,image_filename";
     private static final Map<String, Integer> COLUMN_INDICES;
     private final String jdbcUrl;
     private AtomicLong articleId = new AtomicLong(1);
@@ -64,7 +64,7 @@ public class CsvArticleRepository implements ArticleDatabase {
 
     @Override
     public Article save(Article article) {
-        String sql = "INSERT INTO articles (id, title, content, user_id, image_path, image_filename) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO articles (id, title, content, user_id, user_name, image_path, image_filename) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(jdbcUrl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -74,12 +74,13 @@ public class CsvArticleRepository implements ArticleDatabase {
             pstmt.setString(2, article.getTitle());
             pstmt.setString(3, article.getContent());
             pstmt.setString(4, article.getAuthor().getUserId());
+            pstmt.setString(5, article.getAuthor().getName());
             if (article.getImage() != null) {
-                pstmt.setString(5, article.getImage().getPath());
-                pstmt.setString(6, article.getImage().getFilename());
+                pstmt.setString(6, article.getImage().getPath());
+                pstmt.setString(7, article.getImage().getFilename());
             } else {
-                pstmt.setString(5, null);
                 pstmt.setString(6, null);
+                pstmt.setString(7, null);
             }
 
             int affectedRows = pstmt.executeUpdate();
@@ -174,10 +175,11 @@ public class CsvArticleRepository implements ArticleDatabase {
         String title = rs.getString(getColumnIndex("title"));
         String content = rs.getString(getColumnIndex("content"));
         String userId = rs.getString(getColumnIndex("user_id"));
+        String username = rs.getString(getColumnIndex("user_name"));
         String imagePath = rs.getString(getColumnIndex("image_path"));
         String imageFilename = rs.getString(getColumnIndex("image_filename"));
 
-        User author = new User(userId, null, null);
+        User author = new User(userId, null, username);
         Image image = (imagePath != null && imageFilename != null) ? new Image(0L, imagePath, imageFilename, id) : null;
 
         return new Article(id, title, content, author, image);
