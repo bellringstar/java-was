@@ -1,6 +1,5 @@
 package codesquad.webserver.db.csv;
 
-import codesquad.webserver.db.user.CsvUserRepository;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -23,11 +22,12 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CsvResultSet implements ResultSet {
 
+    private static final Logger logger = LoggerFactory.getLogger(CsvResultSet.class);
     private final List<String[]> data;
     private int currentRow = 0;
     private boolean isClosed = false;
@@ -76,7 +76,9 @@ public class CsvResultSet implements ResultSet {
         if (columnIndex < 1 || columnIndex > data.get(currentRow).length) {
             throw new SQLException("Invalid column index");
         }
-        return data.get(currentRow)[columnIndex - 1];
+        String string = data.get(currentRow)[columnIndex - 1];
+        String substring = string.substring(1, string.length() - 1);
+        return substring;
     }
 
     private void checkValidRow() throws SQLException {
@@ -109,6 +111,7 @@ public class CsvResultSet implements ResultSet {
     @Override
     public long getLong(int columnIndex) throws SQLException {
         String value = getString(columnIndex);
+        value = value.substring(1, value.length() - 1);
         try {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {
