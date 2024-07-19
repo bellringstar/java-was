@@ -36,8 +36,6 @@ sequenceDiagram
         DispatcherServlet->>HandlerMapping: getHandler(HttpRequest)
         HandlerMapping-->>DispatcherServlet: Handler
         DispatcherServlet->>HandlerAdapter: handle(HttpRequest, Handler)
-        HandlerAdapter->>Controller: handleRequest(HttpRequest)
-        Controller-->>HandlerAdapter: ModelAndView
         HandlerAdapter-->>DispatcherServlet: ModelAndView
         DispatcherServlet->>ViewResolver: resolveViewName(String viewName)
         ViewResolver-->>DispatcherServlet: View
